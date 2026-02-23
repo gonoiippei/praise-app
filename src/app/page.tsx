@@ -1,65 +1,91 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import GlowOrbs from '@/components/GlowOrbs'
+import FloatingEmojis from '@/components/FloatingEmojis'
+import BgmController from '@/components/BgmController'
+
+export default function HomePage() {
+  const [stats, setStats] = useState({ total: 0, today: 0 })
+  const [bgmEnabled, setBgmEnabled] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then((r) => r.json())
+      .then(setStats)
+      .catch(() => {})
+  }, [])
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="relative min-h-screen overflow-hidden flex flex-col">
+      <GlowOrbs />
+      <FloatingEmojis />
+
+      {/* ヘッダー */}
+      <header className="relative z-10 flex items-center justify-between px-6 py-4">
+        <Link
+          href="/members"
+          style={{ color: '#B8B0D0', fontSize: 14 }}
+          className="hover:text-white transition-colors"
+        >
+          メンバー管理
+        </Link>
+        <BgmController enabled={bgmEnabled} onToggle={() => setBgmEnabled((v) => !v)} />
+      </header>
+
+      {/* メインコンテンツ */}
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center">
+        <div className="mb-2">
+          <span style={{ fontSize: 14, color: '#B8B0D0', letterSpacing: '0.1em' }}>
+            みんなで作る、温かいチームへ
+          </span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <h1
+          className="gradient-text font-black mb-8"
+          style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', lineHeight: 1.1 }}
+        >
+          褒めよう！
+        </h1>
+
+        {/* 統計 */}
+        <div className="flex gap-4 mb-10 flex-wrap justify-center">
+          <div className="glass-card px-6 py-4 text-center" style={{ minWidth: 160 }}>
+            <div style={{ fontSize: 28, fontWeight: 900, color: '#FFD43B' }}>
+              {stats.total}
+            </div>
+            <div style={{ fontSize: 13, color: '#B8B0D0', marginTop: 4 }}>
+              🏆 累計の褒め
+            </div>
+          </div>
+          <div className="glass-card px-6 py-4 text-center" style={{ minWidth: 160 }}>
+            <div style={{ fontSize: 28, fontWeight: 900, color: '#FF6B9D' }}>
+              {stats.today}
+            </div>
+            <div style={{ fontSize: 13, color: '#B8B0D0', marginTop: 4 }}>
+              ✨ 今日の褒め
+            </div>
+          </div>
         </div>
+
+        {/* ボタン */}
+        <div className="flex flex-col gap-4 w-full" style={{ maxWidth: 320 }}>
+          <Link href="/send" className="block">
+            <button className="btn-main w-full py-4" style={{ fontSize: 20 }}>
+              🎉 褒める！
+            </button>
+          </Link>
+          <Link href="/praises" className="block">
+            <button className="btn-secondary w-full py-3" style={{ fontSize: 15 }}>
+              これまでの褒めを見る
+            </button>
+          </Link>
+        </div>
+
+        <p className="mt-10" style={{ color: '#6E6490', fontSize: 13 }}>
+          送った人の名前は一切記録されません 🔒
+        </p>
       </main>
     </div>
-  );
+  )
 }
