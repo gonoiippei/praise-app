@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import GlowOrbs from '@/components/GlowOrbs'
-import Avatar from '@/components/Avatar'
+import BgmController from '@/components/BgmController'
 import { Member } from '@/types'
 
 interface Petal {
@@ -17,11 +18,9 @@ interface Petal {
 
 function playChurchBell(audioCtx: AudioContext) {
   const time = audioCtx.currentTime
-  // F→A→C→F のアルペジオ
   const notes = [349.23, 440, 523.25, 698.46]
   notes.forEach((freq, i) => {
     const t = time + i * 0.25
-    // 基音
     const osc1 = audioCtx.createOscillator()
     const gain1 = audioCtx.createGain()
     osc1.frequency.value = freq
@@ -34,7 +33,6 @@ function playChurchBell(audioCtx: AudioContext) {
     osc1.start(t)
     osc1.stop(t + 2.6)
 
-    // 非整数倍音 (2.756倍)
     const osc2 = audioCtx.createOscillator()
     const gain2 = audioCtx.createGain()
     osc2.frequency.value = freq * 2.756
@@ -47,7 +45,6 @@ function playChurchBell(audioCtx: AudioContext) {
     osc2.start(t)
     osc2.stop(t + 1.6)
 
-    // 非整数倍音 (5.404倍)
     const osc3 = audioCtx.createOscillator()
     const gain3 = audioCtx.createGain()
     osc3.frequency.value = freq * 5.404
@@ -61,10 +58,8 @@ function playChurchBell(audioCtx: AudioContext) {
     osc3.stop(t + 0.9)
   })
 
-  // シマーコード（和音の余韻）
   const shimmerTime = time + notes.length * 0.25 + 0.1
-  const shimmerFreqs = [349.23, 440, 523.25, 698.46]
-  shimmerFreqs.forEach((freq) => {
+  ;[349.23, 440, 523.25, 698.46].forEach((freq) => {
     const osc = audioCtx.createOscillator()
     const gain = audioCtx.createGain()
     osc.frequency.value = freq
@@ -90,6 +85,7 @@ export default function SendPage() {
   const [loading, setLoading] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
   const [petals, setPetals] = useState<Petal[]>([])
+  const [bgmEnabled, setBgmEnabled] = useState(true)
   const petalIdRef = useRef(0)
 
   useEffect(() => {
@@ -111,12 +107,10 @@ export default function SendPage() {
       })
       if (!res.ok) throw new Error('failed')
 
-      // 鐘の音を鳴らす
       const ctx = new AudioContext()
       playChurchBell(ctx)
 
-      // 花びらを生成
-      const newPetals: Petal[] = Array.from({ length: 40 }, (_, i) => ({
+      const newPetals: Petal[] = Array.from({ length: 40 }, () => ({
         id: petalIdRef.current++,
         left: Math.random() * 100,
         delay: Math.random() * 2,
@@ -125,11 +119,8 @@ export default function SendPage() {
         color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
       }))
       setPetals(newPetals)
-
-      // ポップアップ表示
       setShowPopup(true)
 
-      // 3秒後に一覧へ遷移
       setTimeout(() => {
         router.push('/praises')
       }, 3000)
@@ -139,6 +130,8 @@ export default function SendPage() {
       setLoading(false)
     }
   }
+
+  const canSubmit = !!selectedMember && !!message.trim() && !loading
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -170,10 +163,7 @@ export default function SendPage() {
           className="fixed inset-0 z-30 flex items-center justify-center"
           style={{ background: 'rgba(26, 16, 48, 0.85)', backdropFilter: 'blur(8px)' }}
         >
-          <div
-            className="glass-card popup-animate text-center px-10 py-12"
-            style={{ maxWidth: 400 }}
-          >
+          <div className="glass-card popup-animate text-center px-10 py-12" style={{ maxWidth: 400 }}>
             <div style={{ fontSize: 64 }}>🎉</div>
             <h2 className="gradient-text font-black mt-4" style={{ fontSize: 28 }}>
               褒めを届けました！
@@ -190,26 +180,37 @@ export default function SendPage() {
 
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* ヘッダー */}
-        <header className="flex items-center px-6 py-4 gap-3">
-          <button
-            onClick={() => router.back()}
+        <header className="flex items-center justify-between px-6 py-4">
+          <Link
+            href="/"
             style={{ color: '#B8B0D0', fontSize: 14 }}
             className="hover:text-white transition-colors"
           >
-            ← 戻る
-          </button>
+            ← ホームに戻る
+          </Link>
+          <BgmController enabled={bgmEnabled} onToggle={() => setBgmEnabled((v) => !v)} />
         </header>
 
-        <main className="flex-1 px-4 pb-8 max-w-lg mx-auto w-full">
-          <h1 className="gradient-text font-black mb-6 text-center" style={{ fontSize: 32 }}>
-            誰を褒める？
+        <main className="flex-1 px-4 pb-8 w-full" style={{ maxWidth: 560, margin: '0 auto' }}>
+
+          {/* タイトル */}
+          <h1 className="font-black mb-1" style={{ fontSize: 26, color: '#F5F3FF' }}>
+            褒めを届ける 🎁
           </h1>
+          <p className="mb-6" style={{ color: '#B8B0D0', fontSize: 14 }}>
+            あなたの名前は相手に伝わりません。気軽にどうぞ！
+          </p>
+
+          {/* 誰を褒める？ */}
+          <div className="mb-2" style={{ color: '#FF6B9D', fontSize: 14, fontWeight: 700 }}>
+            🎯 誰を褒める？
+          </div>
 
           {/* 検索 */}
           <div className="mb-4">
             <input
               type="text"
-              placeholder="名前で検索…"
+              placeholder="🔍 名前で検索..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-4 py-3 rounded-2xl"
@@ -217,98 +218,102 @@ export default function SendPage() {
                 background: 'rgba(255,255,255,0.08)',
                 border: '1px solid rgba(255,255,255,0.15)',
                 color: '#F5F3FF',
-                fontSize: 15,
+                fontSize: 14,
                 outline: 'none',
               }}
             />
           </div>
 
-          {/* メンバーリスト */}
+          {/* メンバー ピル型タグ */}
           <div
-            className="glass-card mb-6 overflow-y-auto"
-            style={{ maxHeight: 280 }}
+            className="mb-6 overflow-y-auto"
+            style={{ maxHeight: 220 }}
           >
             {members.length === 0 ? (
-              <p className="text-center py-8" style={{ color: '#6E6490' }}>
-                メンバーが見つかりません
-              </p>
+              <p style={{ color: '#6E6490', fontSize: 14 }}>メンバーが見つかりません</p>
             ) : (
-              members.map((member) => (
-                <button
-                  key={member.id}
-                  onClick={() => setSelectedMember(member)}
-                  className="w-full flex items-center gap-3 px-4 py-3 transition-all text-left"
-                  style={{
-                    borderBottom: '1px solid rgba(255,255,255,0.05)',
-                    background:
-                      selectedMember?.id === member.id
-                        ? 'rgba(192, 132, 252, 0.2)'
-                        : 'transparent',
-                  }}
-                >
-                  <Avatar name={member.name} size={36} />
-                  <span style={{ color: '#F5F3FF', fontWeight: selectedMember?.id === member.id ? 700 : 400 }}>
-                    {member.name}
-                  </span>
-                  {selectedMember?.id === member.id && (
-                    <span className="ml-auto" style={{ color: '#C084FC' }}>✓</span>
-                  )}
-                </button>
-              ))
+              <div className="flex flex-wrap gap-2">
+                {members.map((member) => {
+                  const isSelected = selectedMember?.id === member.id
+                  return (
+                    <button
+                      key={member.id}
+                      onClick={() => setSelectedMember(isSelected ? null : member)}
+                      style={{
+                        padding: '6px 16px',
+                        borderRadius: 50,
+                        fontSize: 13,
+                        fontWeight: isSelected ? 700 : 400,
+                        background: isSelected
+                          ? 'linear-gradient(135deg, #FF6B9D, #C084FC)'
+                          : 'rgba(255,255,255,0.08)',
+                        color: '#F5F3FF',
+                        border: isSelected
+                          ? '1px solid transparent'
+                          : '1px solid rgba(255,255,255,0.15)',
+                        transition: 'all 0.15s',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {member.name}
+                    </button>
+                  )
+                })}
+              </div>
             )}
           </div>
 
-          {/* 選択中メンバー表示 */}
-          {selectedMember && (
-            <div
-              className="glass-card flex items-center gap-3 px-4 py-3 mb-4"
-              style={{ borderTop: '3px solid #C084FC' }}
-            >
-              <Avatar name={selectedMember.name} size={40} />
-              <div>
-                <div style={{ fontSize: 12, color: '#B8B0D0' }}>褒める相手</div>
-                <div style={{ fontWeight: 700, color: '#F5F3FF' }}>{selectedMember.name}</div>
-              </div>
-            </div>
-          )}
-
-          {/* メッセージ入力 */}
+          {/* メッセージ */}
+          <div className="mb-2" style={{ color: '#B8B0D0', fontSize: 14, fontWeight: 700 }}>
+            💬 メッセージ
+          </div>
           <div className="mb-6">
             <textarea
-              placeholder={selectedMember ? `${selectedMember.name} さんへの褒め言葉を書いてください…` : 'まず相手を選んでください'}
+              placeholder={
+                selectedMember
+                  ? `いつもありがとう！〇〇のおかげで助かってます...`
+                  : 'まず相手を選んでください'
+              }
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              rows={4}
+              rows={5}
               disabled={!selectedMember}
               className="w-full px-4 py-3 rounded-2xl resize-none"
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 border: '1px solid rgba(255,255,255,0.15)',
                 color: '#F5F3FF',
-                fontSize: 15,
+                fontSize: 14,
                 outline: 'none',
-                opacity: selectedMember ? 1 : 0.5,
+                opacity: selectedMember ? 1 : 0.6,
               }}
             />
+            <div className="text-right mt-1" style={{ color: '#6E6490', fontSize: 12 }}>
+              {message.length} 文字
+            </div>
           </div>
 
           {/* 送信ボタン */}
           <button
             onClick={handleSubmit}
-            disabled={!selectedMember || !message.trim() || loading}
-            className="btn-main w-full py-4"
+            disabled={!canSubmit}
+            className="w-full py-4"
             style={{
-              fontSize: 18,
-              opacity: !selectedMember || !message.trim() || loading ? 0.5 : 1,
-              cursor: !selectedMember || !message.trim() || loading ? 'not-allowed' : 'pointer',
+              fontSize: 17,
+              fontWeight: 700,
+              borderRadius: 50,
+              background: canSubmit
+                ? 'linear-gradient(135deg, #FFD43B, #FF9F43)'
+                : 'rgba(255,255,255,0.1)',
+              color: canSubmit ? '#1A1030' : '#6E6490',
+              border: 'none',
+              cursor: canSubmit ? 'pointer' : 'not-allowed',
+              transition: 'all 0.2s',
+              boxShadow: canSubmit ? '0 4px 20px rgba(255, 212, 59, 0.3)' : 'none',
             }}
           >
-            {loading ? '送信中…' : '🎉 褒めを届ける！'}
+            {loading ? '送信中…' : '🍊 匿名で褒める！'}
           </button>
-
-          <p className="text-center mt-4" style={{ color: '#6E6490', fontSize: 13 }}>
-            あなたの名前は記録されません 🔒
-          </p>
         </main>
       </div>
     </div>
