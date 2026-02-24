@@ -155,17 +155,8 @@ function useFestiveBgm(enabled: boolean) {
 
   useEffect(() => {
     if (enabled) {
-      const handle = () => {
-        start()
-        document.removeEventListener('click', handle)
-        document.removeEventListener('touchstart', handle)
-      }
-      document.addEventListener('click', handle)
-      document.addEventListener('touchstart', handle)
-      return () => {
-        document.removeEventListener('click', handle)
-        document.removeEventListener('touchstart', handle)
-      }
+      // トグルのクリック自体がユーザー操作なので即時起動
+      start()
     } else {
       stopAll()
     }
