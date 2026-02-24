@@ -5,8 +5,11 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const supabase = getSupabaseClient()
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  // JST（UTC+9）基準で今日の0時を算出
+  const now = new Date()
+  const jstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000)
+  jstNow.setUTCHours(0, 0, 0, 0)
+  const today = new Date(jstNow.getTime() - 9 * 60 * 60 * 1000)
 
   const [totalResult, todayResult] = await Promise.all([
     supabase.from('praises').select('id', { count: 'exact', head: true }),
