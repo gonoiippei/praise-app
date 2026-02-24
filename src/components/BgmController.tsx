@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface BgmControllerProps {
   enabled: boolean
@@ -84,12 +84,11 @@ export default function BgmController({ enabled, onToggle }: BgmControllerProps)
     audioCtxRef.current = ctx
     startedRef.current = true
 
-    // コード進行: C→Am→F→G 4秒ごと
     const chords = [
-      [261, 329, 392], // C
-      [220, 261, 329], // Am
-      [174, 220, 261], // F
-      [196, 247, 294], // G
+      [261, 329, 392],
+      [220, 261, 329],
+      [174, 220, 261],
+      [196, 247, 294],
     ]
     let chordIndex = 0
 
@@ -99,46 +98,27 @@ export default function BgmController({ enabled, onToggle }: BgmControllerProps)
       chordIndex = (chordIndex + 1) % chords.length
     }
     playNextChord()
-    const chordInterval = setInterval(playNextChord, 4000)
-    intervalRefs.current.push(chordInterval)
+    intervalRefs.current.push(setInterval(playNextChord, 4000))
 
-    // きらきらアルペジオ（ランダムタイミング）
     const scheduleArpeggio = () => {
       if (!audioCtxRef.current) return
       playArpeggio(audioCtxRef.current)
-      const next = 800 + Math.random() * 2000
-      const t = setTimeout(scheduleArpeggio, next)
-      timeoutRefs.current.push(t)
+      timeoutRefs.current.push(setTimeout(scheduleArpeggio, 800 + Math.random() * 2000))
     }
-    const t1 = setTimeout(scheduleArpeggio, 1000)
-    timeoutRefs.current.push(t1)
+    timeoutRefs.current.push(setTimeout(scheduleArpeggio, 1000))
 
-    // 柔らかいベル（数秒おき）
     const scheduleBell = () => {
       if (!audioCtxRef.current) return
       playBell(audioCtxRef.current)
-      const next = 5000 + Math.random() * 8000
-      const t = setTimeout(scheduleBell, next)
-      timeoutRefs.current.push(t)
+      timeoutRefs.current.push(setTimeout(scheduleBell, 5000 + Math.random() * 8000))
     }
-    const t2 = setTimeout(scheduleBell, 3000)
-    timeoutRefs.current.push(t2)
+    timeoutRefs.current.push(setTimeout(scheduleBell, 3000))
   }
 
   useEffect(() => {
     if (enabled) {
-      // ユーザー操作後に開始するためクリックイベントを待つ
-      const handleFirstInteraction = () => {
-        startBgm()
-        document.removeEventListener('click', handleFirstInteraction)
-        document.removeEventListener('touchstart', handleFirstInteraction)
-      }
-      document.addEventListener('click', handleFirstInteraction)
-      document.addEventListener('touchstart', handleFirstInteraction)
-      return () => {
-        document.removeEventListener('click', handleFirstInteraction)
-        document.removeEventListener('touchstart', handleFirstInteraction)
-      }
+      // ONにした瞬間のクリック自体がユーザー操作なので即時起動
+      startBgm()
     } else {
       stopAll()
     }
@@ -151,15 +131,22 @@ export default function BgmController({ enabled, onToggle }: BgmControllerProps)
   }, [])
 
   return (
-    <button
-      onClick={onToggle}
-      className="flex items-center gap-2 text-sm"
-      title={enabled ? 'BGMをOFF' : 'BGMをON'}
-    >
-      <span style={{ color: '#B8B0D0', fontSize: 12 }}>BGM</span>
-      <div className={`toggle-switch ${enabled ? 'on' : 'off'}`}>
-        <div className="toggle-knob" />
-      </div>
-    </button>
+    <div className="flex items-center gap-2">
+      {!enabled && (
+        <span style={{ color: '#B8B0D0', fontSize: 11, maxWidth: 120, lineHeight: 1.4, textAlign: 'right' }}>
+          オンにすると素敵な音楽が流れます♪
+        </span>
+      )}
+      <button
+        onClick={onToggle}
+        className="flex items-center gap-2 text-sm"
+        title={enabled ? 'BGMをOFF' : 'BGMをON'}
+      >
+        <span style={{ color: '#B8B0D0', fontSize: 12 }}>BGM</span>
+        <div className={`toggle-switch ${enabled ? 'on' : 'off'}`}>
+          <div className="toggle-knob" />
+        </div>
+      </button>
+    </div>
   )
 }

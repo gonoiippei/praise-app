@@ -85,7 +85,7 @@ export default function SendPage() {
   const [loading, setLoading] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
   const [petals, setPetals] = useState<Petal[]>([])
-  const [bgmEnabled, setBgmEnabled] = useState(true)
+  const [bgmEnabled, setBgmEnabled] = useState(false)
   const petalIdRef = useRef(0)
 
   useEffect(() => {

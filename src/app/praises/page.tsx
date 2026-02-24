@@ -182,7 +182,7 @@ export default function PraisesPage() {
   const [members, setMembers] = useState<Member[]>([])
   const [selectedMemberId, setSelectedMemberId] = useState<string>('')
   const [loading, setLoading] = useState(true)
-  const [bgmEnabled, setBgmEnabled] = useState(true)
+  const [bgmEnabled, setBgmEnabled] = useState(false)
 
   useFestiveBgm(bgmEnabled)
 

@@ -8,7 +8,7 @@ import BgmController from '@/components/BgmController'
 
 export default function HomePage() {
   const [stats, setStats] = useState({ total: 0, today: 0 })
-  const [bgmEnabled, setBgmEnabled] = useState(true)
+  const [bgmEnabled, setBgmEnabled] = useState(false)
 
   useEffect(() => {
     fetch('/api/stats')
