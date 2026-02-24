@@ -22,69 +22,78 @@ export default function HomePage() {
       <GlowOrbs />
       <FloatingEmojis />
 
-      {/* ヘッダー */}
-      <header className="relative z-10 flex items-center justify-between px-6 py-4">
-        <Link
-          href="/members"
-          style={{ color: '#B8B0D0', fontSize: 14 }}
-          className="hover:text-white transition-colors"
-        >
-          メンバー管理
-        </Link>
+      {/* BGMトグル（右上） */}
+      <div className="relative z-10 flex justify-end px-6 py-4">
         <BgmController enabled={bgmEnabled} onToggle={() => setBgmEnabled((v) => !v)} />
-      </header>
+      </div>
 
       {/* メインコンテンツ */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center">
-        <div className="mb-2">
-          <span style={{ fontSize: 14, color: '#B8B0D0', letterSpacing: '0.1em' }}>
-            みんなで作る、温かいチームへ
-          </span>
-        </div>
-        <h1
-          className="gradient-text font-black mb-8"
-          style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', lineHeight: 1.1 }}
-        >
-          褒めよう！
+
+        {/* 👏 絵文字 */}
+        <div style={{ fontSize: 56, marginBottom: 16 }}>👏</div>
+
+        {/* タイトル */}
+        <h1 className="font-black mb-4" style={{ lineHeight: 1.2 }}>
+          <div style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', color: '#F5F3FF' }}>
+            匿名で、
+          </div>
+          <div
+            className="gradient-text"
+            style={{ fontSize: 'clamp(2.5rem, 9vw, 4.5rem)' }}
+          >
+            褒めよう！
+          </div>
         </h1>
 
-        {/* 統計 */}
-        <div className="flex gap-4 mb-10 flex-wrap justify-center">
-          <div className="glass-card px-6 py-4 text-center" style={{ minWidth: 160 }}>
-            <div style={{ fontSize: 28, fontWeight: 900, color: '#FFD43B' }}>
-              {stats.total}
-            </div>
-            <div style={{ fontSize: 13, color: '#B8B0D0', marginTop: 4 }}>
-              🏆 累計の褒め
-            </div>
+        {/* サブテキスト */}
+        <p className="mb-8" style={{ color: '#B8B0D0', fontSize: 15, lineHeight: 1.8 }}>
+          チームの仲間に、匿名で感謝や賞賛を届けよう。<br />
+          あなたの一言が、誰かの一日を変えるかも ✨
+        </p>
+
+        {/* 統計（ピル型） */}
+        <div className="flex flex-col gap-3 mb-8 w-full" style={{ maxWidth: 340 }}>
+          <div
+            className="glass-card px-6 py-3 text-center"
+            style={{ borderRadius: 50 }}
+          >
+            <span style={{ color: '#F5F3FF', fontSize: 15 }}>
+              🏆 累計 <span style={{ fontWeight: 900, color: '#FFD43B' }}>{stats.total}件</span> の褒めが届いています
+            </span>
           </div>
-          <div className="glass-card px-6 py-4 text-center" style={{ minWidth: 160 }}>
-            <div style={{ fontSize: 28, fontWeight: 900, color: '#FF6B9D' }}>
-              {stats.today}
-            </div>
-            <div style={{ fontSize: 13, color: '#B8B0D0', marginTop: 4 }}>
-              ✨ 今日の褒め
-            </div>
+          <div
+            className="glass-card px-6 py-3 text-center"
+            style={{ borderRadius: 50 }}
+          >
+            <span style={{ color: '#F5F3FF', fontSize: 15 }}>
+              ✨ 今日は <span style={{ fontWeight: 900, color: '#FF6B9D' }}>{stats.today}件</span> の褒めが生まれました！
+            </span>
           </div>
         </div>
 
         {/* ボタン */}
-        <div className="flex flex-col gap-4 w-full" style={{ maxWidth: 320 }}>
+        <div className="flex flex-col gap-3 w-full" style={{ maxWidth: 340 }}>
           <Link href="/send" className="block">
-            <button className="btn-main w-full py-4" style={{ fontSize: 20 }}>
-              🎉 褒める！
+            <button className="btn-main w-full py-4" style={{ fontSize: 18, borderRadius: 50 }}>
+              🔥 褒める！
             </button>
           </Link>
           <Link href="/praises" className="block">
-            <button className="btn-secondary w-full py-3" style={{ fontSize: 15 }}>
-              これまでの褒めを見る
+            <button className="btn-secondary w-full py-3" style={{ fontSize: 15, borderRadius: 50 }}>
+              🖼 これまでの褒めを見る
             </button>
           </Link>
         </div>
 
-        <p className="mt-10" style={{ color: '#6E6490', fontSize: 13 }}>
-          送った人の名前は一切記録されません 🔒
-        </p>
+        {/* メンバー管理（下部） */}
+        <Link
+          href="/members"
+          className="mt-8 hover:text-white transition-colors"
+          style={{ color: '#6E6490', fontSize: 13 }}
+        >
+          ⚙ メンバー管理
+        </Link>
       </main>
     </div>
   )
