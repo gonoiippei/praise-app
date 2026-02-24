@@ -57,7 +57,67 @@ export async function POST(request: NextRequest) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `🎉 *${memberName}* さんが褒められました！\n\n${data.message}\n\n褒め一覧はこちら → ${appUrl}/praises\n褒めアプリはこちら → ${appUrl}`,
+          text: `🎉 ${memberName} さんが褒められました！`,
+          blocks: [
+            {
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: '✨ *ほめ通信が届きました* ✨',
+              },
+            },
+            {
+              type: 'header',
+              text: {
+                type: 'plain_text',
+                text: `🎉 ${memberName} さんが褒められました！`,
+                emoji: true,
+              },
+            },
+            {
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `💬 *褒めメッセージ：*\n> ${data.message}`,
+              },
+            },
+            {
+              type: 'context',
+              elements: [
+                {
+                  type: 'mrkdwn',
+                  text: '📝 _匿名の誰かより、こっそりと。_',
+                },
+              ],
+            },
+            {
+              type: 'divider',
+            },
+            {
+              type: 'actions',
+              elements: [
+                {
+                  type: 'button',
+                  text: {
+                    type: 'plain_text',
+                    text: '🌟 褒め一覧を見る',
+                    emoji: true,
+                  },
+                  url: `${appUrl}/praises`,
+                  style: 'primary',
+                },
+                {
+                  type: 'button',
+                  text: {
+                    type: 'plain_text',
+                    text: '✍️ 誰かを褒める',
+                    emoji: true,
+                  },
+                  url: appUrl,
+                },
+              ],
+            },
+          ],
         }),
       })
     } catch {
