@@ -7,7 +7,7 @@ import FloatingEmojis from '@/components/FloatingEmojis'
 import BgmController from '@/components/BgmController'
 
 export default function HomePage() {
-  const [stats, setStats] = useState({ total: 0, today: 0 })
+  const [stats, setStats] = useState<{ total: number; today: number } | null>(null)
   const [bgmEnabled, setBgmEnabled] = useState(false)
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function HomePage() {
             style={{ borderRadius: 50 }}
           >
             <span style={{ color: '#F5F3FF', fontSize: 15 }}>
-              🏆 累計 <span style={{ fontWeight: 900, color: '#FFD43B' }}>{stats.total}件</span> の褒めが届いています
+              🏆 累計 <span style={{ fontWeight: 900, color: '#FFD43B' }}>{stats ? `${stats.total}件` : '…'}</span> の褒めが届いています
             </span>
           </div>
           <div
@@ -75,7 +75,7 @@ export default function HomePage() {
             style={{ borderRadius: 50 }}
           >
             <span style={{ color: '#F5F3FF', fontSize: 15 }}>
-              ✨ 今日は <span style={{ fontWeight: 900, color: '#FF6B9D' }}>{stats.today}件</span> の褒めが生まれました！
+              ✨ 今日は <span style={{ fontWeight: 900, color: '#FF6B9D' }}>{stats ? `${stats.today}件` : '…'}</span> の褒めが生まれました！
             </span>
           </div>
         </div>
