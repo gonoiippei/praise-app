@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import GlowOrbs from '@/components/GlowOrbs'
 import Avatar from '@/components/Avatar'
+import BgmController from '@/components/BgmController'
 import { Praise, Member } from '@/types'
 
 const CELEBRATION_EMOJIS = ['🎉', '✨', '💖', '🌟', '🙌', '💐', '🎊', '⭐', '🔥', '💪', '👏', '🌈', '💫', '🥳', '😍']
@@ -213,27 +214,17 @@ export default function PraisesPage() {
           <Link href="/" style={{ color: '#B8B0D0', fontSize: 14 }} className="hover:text-white transition-colors">
             ← ホームへ
           </Link>
-          <div className="flex items-center gap-3">
-            <span style={{ color: '#B8B0D0', fontSize: 13 }}>
-              {praises.length} 件のほめ
-            </span>
-            {/* BGMトグル */}
-            <button
-              onClick={() => setBgmEnabled((v) => !v)}
-              className="flex items-center gap-2 text-sm"
-              title={bgmEnabled ? 'BGMをOFF' : 'BGMをON'}
-            >
-              <span style={{ color: '#B8B0D0', fontSize: 12 }}>BGM</span>
-              <div className={`toggle-switch ${bgmEnabled ? 'on' : 'off'}`}>
-                <div className="toggle-knob" />
-              </div>
-            </button>
-          </div>
+          <BgmController enabled={bgmEnabled} onToggle={() => setBgmEnabled((v) => !v)} />
         </header>
 
         <main className="flex-1 px-4 pb-24 max-w-2xl mx-auto w-full">
           <h1 className="gradient-text font-black mb-6 text-center" style={{ fontSize: 28 }}>
             これまでのほめ 🎊
+            {praises.length > 0 && (
+              <span style={{ fontSize: 15, fontWeight: 400, color: '#B8B0D0', marginLeft: 8, background: 'none', WebkitTextFillColor: '#B8B0D0' }}>
+                {praises.length}件
+              </span>
+            )}
           </h1>
 
           {/* フィルター */}
