@@ -10,8 +10,8 @@ const zenMaruGothic = Zen_Maru_Gothic({
 })
 
 export const metadata: Metadata = {
-  title: '匿名で褒めよう！',
-  description: '匿名でチームメンバーを褒め合えるアプリ',
+  title: '匿名でほめよう！',
+  description: '匿名でチームメンバーをほめ合えるアプリ',
 }
 
 export default function RootLayout({

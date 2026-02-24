@@ -166,7 +166,7 @@ export default function SendPage() {
           <div className="glass-card popup-animate text-center px-10 py-12" style={{ maxWidth: 400 }}>
             <div style={{ fontSize: 64 }}>🎉</div>
             <h2 className="gradient-text font-black mt-4" style={{ fontSize: 28 }}>
-              褒めを届けました！
+              ほめを届けました！
             </h2>
             <p style={{ color: '#B8B0D0', marginTop: 12, fontSize: 14 }}>
               {selectedMember?.name} さんへ送りました
@@ -195,15 +195,15 @@ export default function SendPage() {
 
           {/* タイトル */}
           <h1 className="font-black mb-1" style={{ fontSize: 26, color: '#F5F3FF' }}>
-            褒めを届ける 🎁
+            ほめを届ける 🎁
           </h1>
           <p className="mb-6" style={{ color: '#B8B0D0', fontSize: 14 }}>
             あなたの名前は相手に伝わりません。気軽にどうぞ！
           </p>
 
-          {/* 誰を褒める？ */}
+          {/* 誰をほめる？ */}
           <div className="mb-2" style={{ color: '#FF6B9D', fontSize: 14, fontWeight: 700 }}>
-            🎯 誰を褒める？
+            🎯 誰をほめる？
           </div>
 
           {/* 検索 */}
@@ -312,7 +312,7 @@ export default function SendPage() {
               boxShadow: canSubmit ? '0 4px 20px rgba(255, 212, 59, 0.3)' : 'none',
             }}
           >
-            {loading ? '送信中…' : '🍊 匿名で褒める！'}
+            {loading ? '送信中…' : '🍊 匿名でほめる！'}
           </button>
         </main>
       </div>

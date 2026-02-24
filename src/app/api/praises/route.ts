@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `🎉 ${memberName} さんが褒められました！`,
+          text: `🎉 ${memberName} さんがほめられました！`,
           blocks: [
             {
               type: 'section',
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
               type: 'header',
               text: {
                 type: 'plain_text',
-                text: `🎉 ${memberName} さんが褒められました！`,
+                text: `🎉 ${memberName} さんがほめられました！`,
                 emoji: true,
               },
             },
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
               type: 'section',
               text: {
                 type: 'mrkdwn',
-                text: `💬 *褒めメッセージ：*\n> ${data.message}`,
+                text: `💬 *ほめメッセージ：*\n> ${data.message}`,
               },
             },
             {
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
                   type: 'button',
                   text: {
                     type: 'plain_text',
-                    text: '🌟 褒め一覧を見る',
+                    text: '🌟 ほめ一覧を見る',
                     emoji: true,
                   },
                   url: `${appUrl}/praises`,
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
                   type: 'button',
                   text: {
                     type: 'plain_text',
-                    text: '✍️ 誰かを褒める',
+                    text: '✍️ 誰かをほめる',
                     emoji: true,
                   },
                   url: appUrl,

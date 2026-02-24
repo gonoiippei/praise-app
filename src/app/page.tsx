@@ -42,7 +42,7 @@ export default function HomePage() {
             className="gradient-text"
             style={{ fontSize: 'clamp(2.5rem, 9vw, 4.5rem)' }}
           >
-            褒めよう！
+            ほめよう！
           </div>
         </h1>
 
@@ -67,7 +67,7 @@ export default function HomePage() {
             style={{ borderRadius: 50 }}
           >
             <span style={{ color: '#F5F3FF', fontSize: 15 }}>
-              🏆 累計 <span style={{ fontWeight: 900, color: '#FFD43B' }}>{stats ? `${stats.total}件` : '…'}</span> の褒めが届いています
+              🏆 累計 <span style={{ fontWeight: 900, color: '#FFD43B' }}>{stats ? `${stats.total}件` : '…'}</span> のほめが届いています
             </span>
           </div>
           <div
@@ -75,7 +75,7 @@ export default function HomePage() {
             style={{ borderRadius: 50 }}
           >
             <span style={{ color: '#F5F3FF', fontSize: 15 }}>
-              ✨ 今日は <span style={{ fontWeight: 900, color: '#FF6B9D' }}>{stats ? `${stats.today}件` : '…'}</span> の褒めが生まれました！
+              ✨ 今日は <span style={{ fontWeight: 900, color: '#FF6B9D' }}>{stats ? `${stats.today}件` : '…'}</span> のほめが生まれました！
             </span>
           </div>
         </div>
@@ -84,12 +84,12 @@ export default function HomePage() {
         <div className="flex flex-col gap-3 w-full" style={{ maxWidth: 340 }}>
           <Link href="/send" className="block">
             <button className="btn-main w-full py-4" style={{ fontSize: 18, borderRadius: 50 }}>
-              🔥 褒める！
+              🔥 ほめる！
             </button>
           </Link>
           <Link href="/praises" className="block">
             <button className="btn-secondary w-full py-3" style={{ fontSize: 15, borderRadius: 50 }}>
-              🖼 これまでの褒めを見る
+              🖼 これまでのほめを見る
             </button>
           </Link>
         </div>

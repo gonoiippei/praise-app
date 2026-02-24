@@ -215,7 +215,7 @@ export default function PraisesPage() {
           </Link>
           <div className="flex items-center gap-3">
             <span style={{ color: '#B8B0D0', fontSize: 13 }}>
-              {praises.length} 件の褒め
+              {praises.length} 件のほめ
             </span>
             {/* BGMトグル */}
             <button
@@ -233,7 +233,7 @@ export default function PraisesPage() {
 
         <main className="flex-1 px-4 pb-24 max-w-2xl mx-auto w-full">
           <h1 className="gradient-text font-black mb-6 text-center" style={{ fontSize: 28 }}>
-            これまでの褒め 🎊
+            これまでのほめ 🎊
           </h1>
 
           {/* フィルター */}
@@ -269,14 +269,14 @@ export default function PraisesPage() {
             </div>
           )}
 
-          {/* 褒め一覧 */}
+          {/* ほめ一覧 */}
           {loading ? (
             <div className="text-center py-16" style={{ color: '#B8B0D0' }}>読み込み中…</div>
           ) : praises.length === 0 ? (
             <div className="text-center py-16">
               <div style={{ fontSize: 48 }}>💐</div>
-              <p style={{ color: '#B8B0D0', marginTop: 12 }}>まだ褒めがありません</p>
-              <p style={{ color: '#6E6490', fontSize: 13, marginTop: 8 }}>最初の褒めを送ってみよう！</p>
+              <p style={{ color: '#B8B0D0', marginTop: 12 }}>まだほめがありません</p>
+              <p style={{ color: '#6E6490', fontSize: 13, marginTop: 8 }}>最初のほめを送ってみよう！</p>
             </div>
           ) : (
             <div className="flex flex-col gap-4">
@@ -332,7 +332,7 @@ export default function PraisesPage() {
             justifyContent: 'center',
             boxShadow: '0 8px 30px rgba(255, 212, 59, 0.4)',
           }}
-          title="褒める"
+          title="ほめる"
         >
           🎉
         </button>
