@@ -46,6 +46,14 @@ export default function HomePage() {
           </div>
         </h1>
 
+        {/* キャッチコピー */}
+        <p
+          className="gradient-text font-bold mb-3"
+          style={{ fontSize: 13, letterSpacing: '0.02em' }}
+        >
+          感謝に始まり、感謝で終わる1日を過ごすためのアプリ
+        </p>
+
         {/* サブテキスト */}
         <p className="mb-8" style={{ color: '#B8B0D0', fontSize: 15, lineHeight: 1.8 }}>
           チームの仲間に、匿名で感謝や賞賛を届けよう。<br />
