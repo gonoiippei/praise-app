@@ -50,12 +50,14 @@ export async function POST(request: NextRequest) {
   // Slack に通知
   const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL
   if (slackWebhookUrl && data.members) {
+    const memberName = (data.members as { name: string }).name
+    const appUrl = 'https://praise-app-omega.vercel.app'
     try {
       await fetch(slackWebhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `🎉 *${(data.members as { name: string }).name}* さんが褒められました！\n\n💬 褒めメッセージ：\n${data.message}\n\n📝 匿名の誰かより`,
+          text: `🎉 *${memberName}* さんが褒められました！\n\n${data.message}\n\n褒め一覧はこちら → ${appUrl}/praises\n褒めアプリはこちら → ${appUrl}`,
         }),
       })
     } catch {
