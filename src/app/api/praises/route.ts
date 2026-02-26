@@ -120,6 +120,56 @@ export async function POST(request: NextRequest) {
           ],
         }),
       })
+      // マイルストーン通知
+      const { count: totalCount } = await supabase
+        .from('praises')
+        .select('id', { count: 'exact', head: true })
+
+      const MILESTONES = [100, 150, 200, 300, 500, 1000]
+      if (totalCount && MILESTONES.includes(totalCount)) {
+        await fetch(slackWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: `🏆 累計${totalCount}件達成！`,
+            blocks: [
+              {
+                type: 'header',
+                text: {
+                  type: 'plain_text',
+                  text: `🎊 累計${totalCount}件達成おめでとう！`,
+                  emoji: true,
+                },
+              },
+              {
+                type: 'section',
+                text: {
+                  type: 'mrkdwn',
+                  text: `みんなのほめが *${totalCount}件* になりました！\nほめてくれたみなさん、ありがとうございます ✨\nほめがめぐりめぐって、この世界をちょっとだけよくしています 🌍`,
+                },
+              },
+              {
+                type: 'divider',
+              },
+              {
+                type: 'actions',
+                elements: [
+                  {
+                    type: 'button',
+                    text: {
+                      type: 'plain_text',
+                      text: '🌟 ほめ一覧を見る',
+                      emoji: true,
+                    },
+                    url: `${appUrl}/praises`,
+                    style: 'primary',
+                  },
+                ],
+              },
+            ],
+          }),
+        })
+      }
     } catch {
       // Slack通知失敗してもアプリは続行
     }
