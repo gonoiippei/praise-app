@@ -110,16 +110,12 @@ export default function SendPage() {
     setLoading(true)
 
     try {
-      const results = await Promise.all(
-        selectedMembers.map((member) =>
-          fetch('/api/praises', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ member_id: member.id, message }),
-          })
-        )
-      )
-      if (results.some((r) => !r.ok)) throw new Error('failed')
+      const res = await fetch('/api/praises', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ member_ids: selectedMembers.map((m) => m.id), message }),
+      })
+      if (!res.ok) throw new Error('failed')
 
       const ctx = new AudioContext()
       playChurchBell(ctx)

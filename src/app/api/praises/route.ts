@@ -31,33 +31,35 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const supabase = getSupabaseClient()
   const body = await request.json()
-  const { member_id, message, source = 'web' } = body
+  const { member_ids, message, source = 'web' } = body
 
-  if (!member_id || !message || !message.trim()) {
+  // member_ids は必須（配列）
+  if (!member_ids || !Array.isArray(member_ids) || member_ids.length === 0 || !message || !message.trim()) {
     return NextResponse.json({ error: 'メンバーとメッセージを入力してください' }, { status: 400 })
   }
 
+  // 全メンバー分をまとめてinsert
   const { data, error } = await supabase
     .from('praises')
-    .insert({ member_id, message: message.trim(), source })
+    .insert(member_ids.map((id: string) => ({ member_id: id, message: message.trim(), source })))
     .select('*, members(id, name)')
-    .single()
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  // Slack に通知
+  // Slack に通知（1通にまとめる）
   const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL
-  if (slackWebhookUrl && data.members) {
-    const memberName = (data.members as { name: string }).name
+  if (slackWebhookUrl && data && data.length > 0) {
+    const memberNames = data.map((d) => (d.members as { name: string } | null)?.name).filter(Boolean) as string[]
+    const namesText = memberNames.join('・')
     const appUrl = 'https://praise-app-omega.vercel.app'
     try {
       await fetch(slackWebhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `🎉 ${memberName} さんがほめられました！`,
+          text: `🎉 ${namesText} さんがほめられました！`,
           blocks: [
             {
               type: 'section',
@@ -70,7 +72,7 @@ export async function POST(request: NextRequest) {
               type: 'header',
               text: {
                 type: 'plain_text',
-                text: `🎉 ${memberName} さんがほめられました！`,
+                text: `🎉 ${namesText} さんがほめられました！`,
                 emoji: true,
               },
             },
@@ -78,7 +80,7 @@ export async function POST(request: NextRequest) {
               type: 'section',
               text: {
                 type: 'mrkdwn',
-                text: `💬 *ほめメッセージ：*\n> ${data.message}`,
+                text: `💬 *ほめメッセージ：*\n> ${message.trim()}`,
               },
             },
             {
