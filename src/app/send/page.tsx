@@ -75,12 +75,13 @@ function playChurchBell(audioCtx: AudioContext) {
 }
 
 const PETAL_COLORS = ['#FF6B9D', '#FF9F43', '#C084FC', '#FFD43B', '#FF8FAB']
+const MAX_MEMBERS = 10
 
 export default function SendPage() {
   const router = useRouter()
   const [members, setMembers] = useState<Member[]>([])
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+  const [selectedMembers, setSelectedMembers] = useState<Member[]>([])
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
@@ -95,17 +96,30 @@ export default function SendPage() {
       .catch(() => {})
   }, [searchQuery])
 
+  const toggleMember = (member: Member) => {
+    setSelectedMembers((prev) => {
+      const isSelected = prev.some((m) => m.id === member.id)
+      if (isSelected) return prev.filter((m) => m.id !== member.id)
+      if (prev.length >= MAX_MEMBERS) return prev
+      return [...prev, member]
+    })
+  }
+
   const handleSubmit = async () => {
-    if (!selectedMember || !message.trim()) return
+    if (selectedMembers.length === 0 || !message.trim()) return
     setLoading(true)
 
     try {
-      const res = await fetch('/api/praises', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ member_id: selectedMember.id, message }),
-      })
-      if (!res.ok) throw new Error('failed')
+      const results = await Promise.all(
+        selectedMembers.map((member) =>
+          fetch('/api/praises', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ member_id: member.id, message }),
+          })
+        )
+      )
+      if (results.some((r) => !r.ok)) throw new Error('failed')
 
       const ctx = new AudioContext()
       playChurchBell(ctx)
@@ -131,7 +145,12 @@ export default function SendPage() {
     }
   }
 
-  const canSubmit = !!selectedMember && !!message.trim() && !loading
+  const canSubmit = selectedMembers.length > 0 && !!message.trim() && !loading
+
+  // ポップアップ用の名前表示
+  const selectedNamesText = selectedMembers.length === 1
+    ? `${selectedMembers[0].name} さん`
+    : `${selectedMembers.map((m) => m.name).join('・')} さん`
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -168,8 +187,8 @@ export default function SendPage() {
             <h2 className="gradient-text font-black mt-4" style={{ fontSize: 28 }}>
               ほめを届けました！
             </h2>
-            <p style={{ color: '#B8B0D0', marginTop: 12, fontSize: 14 }}>
-              {selectedMember?.name} さんへ送りました
+            <p style={{ color: '#B8B0D0', marginTop: 12, fontSize: 14, lineHeight: 1.8 }}>
+              {selectedNamesText}へ送りました
             </p>
             <p style={{ color: '#6E6490', marginTop: 8, fontSize: 13 }}>
               3秒後に一覧ページへ移動します…
@@ -202,8 +221,23 @@ export default function SendPage() {
           </p>
 
           {/* 誰をほめる？ */}
-          <div className="mb-2" style={{ color: '#FF6B9D', fontSize: 14, fontWeight: 700 }}>
-            🎯 誰をほめる？
+          <div className="flex items-center gap-2 mb-2">
+            <span style={{ color: '#FF6B9D', fontSize: 14, fontWeight: 700 }}>
+              🎯 誰をほめる？
+            </span>
+            <span style={{ color: '#6E6490', fontSize: 12 }}>
+              （最大{MAX_MEMBERS}人まで選べます）
+            </span>
+            {selectedMembers.length > 0 && (
+              <span style={{
+                marginLeft: 'auto',
+                color: '#C084FC',
+                fontSize: 12,
+                fontWeight: 700,
+              }}>
+                {selectedMembers.length}人選択中
+              </span>
+            )}
           </div>
 
           {/* 検索 */}
@@ -225,20 +259,19 @@ export default function SendPage() {
           </div>
 
           {/* メンバー ピル型タグ */}
-          <div
-            className="mb-6 overflow-y-auto"
-            style={{ maxHeight: 220 }}
-          >
+          <div className="mb-6 overflow-y-auto" style={{ maxHeight: 220 }}>
             {members.length === 0 ? (
               <p style={{ color: '#6E6490', fontSize: 14 }}>メンバーが見つかりません</p>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {members.map((member) => {
-                  const isSelected = selectedMember?.id === member.id
+                  const isSelected = selectedMembers.some((m) => m.id === member.id)
+                  const isMaxReached = selectedMembers.length >= MAX_MEMBERS && !isSelected
                   return (
                     <button
                       key={member.id}
-                      onClick={() => setSelectedMember(isSelected ? null : member)}
+                      onClick={() => toggleMember(member)}
+                      disabled={isMaxReached}
                       style={{
                         padding: '6px 16px',
                         borderRadius: 50,
@@ -247,12 +280,13 @@ export default function SendPage() {
                         background: isSelected
                           ? 'linear-gradient(135deg, #FF6B9D, #C084FC)'
                           : 'rgba(255,255,255,0.08)',
-                        color: '#F5F3FF',
+                        color: isMaxReached ? '#4A4060' : '#F5F3FF',
                         border: isSelected
                           ? '1px solid transparent'
                           : '1px solid rgba(255,255,255,0.15)',
                         transition: 'all 0.15s',
-                        cursor: 'pointer',
+                        cursor: isMaxReached ? 'not-allowed' : 'pointer',
+                        opacity: isMaxReached ? 0.4 : 1,
                       }}
                     >
                       {member.name}
@@ -270,14 +304,14 @@ export default function SendPage() {
           <div className="mb-6">
             <textarea
               placeholder={
-                selectedMember
+                selectedMembers.length > 0
                   ? `いつもありがとう！〇〇のおかげで助かってます...`
                   : 'まず相手を選んでください'
               }
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
-              disabled={!selectedMember}
+              disabled={selectedMembers.length === 0}
               className="w-full px-4 py-3 rounded-2xl resize-none"
               style={{
                 background: 'rgba(255,255,255,0.08)',
@@ -285,7 +319,7 @@ export default function SendPage() {
                 color: '#F5F3FF',
                 fontSize: 14,
                 outline: 'none',
-                opacity: selectedMember ? 1 : 0.6,
+                opacity: selectedMembers.length > 0 ? 1 : 0.6,
               }}
             />
             <div className="text-right mt-1" style={{ color: '#6E6490', fontSize: 12 }}>
@@ -312,7 +346,7 @@ export default function SendPage() {
               boxShadow: canSubmit ? '0 4px 20px rgba(255, 212, 59, 0.3)' : 'none',
             }}
           >
-            {loading ? '送信中…' : '🍊 匿名でほめる！'}
+            {loading ? '送信中…' : `🍊 匿名でほめる！${selectedMembers.length > 1 ? `（${selectedMembers.length}人）` : ''}`}
           </button>
         </main>
       </div>
