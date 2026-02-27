@@ -38,10 +38,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'メンバーとメッセージを入力してください' }, { status: 400 })
   }
 
-  // 全メンバー分をまとめてinsert
+  // 複数人の場合は group_id を生成して紐付ける
+  const groupId = member_ids.length > 1 ? crypto.randomUUID() : null
+
+  const rows = member_ids.map((id: string, index: number) => ({
+    member_id: id,
+    message: message.trim(),
+    source,
+    group_id: groupId,
+    is_primary: index === 0, // 最初の1件だけ true（カウント用）
+  }))
+
   const { data, error } = await supabase
     .from('praises')
-    .insert(member_ids.map((id: string) => ({ member_id: id, message: message.trim(), source })))
+    .insert(rows)
     .select('*, members(id, name)')
 
   if (error) {
@@ -122,10 +132,11 @@ export async function POST(request: NextRequest) {
           ],
         }),
       })
-      // マイルストーン通知
+      // マイルストーン通知（is_primary=trueの件数で判定）
       const { count: totalCount } = await supabase
         .from('praises')
         .select('id', { count: 'exact', head: true })
+        .eq('is_primary', true)
 
       const MILESTONES = [100, 150, 200, 300, 500, 1000]
       if (totalCount && MILESTONES.includes(totalCount)) {

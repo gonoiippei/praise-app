@@ -22,6 +22,39 @@ function formatDate(dateStr: string): string {
   return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`
 }
 
+// 表示用グループ型
+interface PraiseGroup {
+  id: string
+  group_id: string | null
+  message: string
+  source: 'web' | 'slack'
+  created_at: string
+  members: Member[]
+}
+
+// 同じ group_id を持つほめを1枚のカードにまとめる
+function groupPraises(praises: Praise[]): PraiseGroup[] {
+  const groups = new Map<string, PraiseGroup>()
+  for (const p of praises) {
+    const key = p.group_id ?? p.id
+    if (groups.has(key)) {
+      if (p.members) groups.get(key)!.members.push(p.members)
+    } else {
+      groups.set(key, {
+        id: key,
+        group_id: p.group_id,
+        message: p.message,
+        source: p.source,
+        created_at: p.created_at,
+        members: p.members ? [p.members] : [],
+      })
+    }
+  }
+  return Array.from(groups.values()).sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )
+}
+
 // =============================================
 // 祝祭的BGM（一覧ページ専用）
 // =============================================
@@ -49,12 +82,11 @@ function useFestiveBgm(enabled: boolean) {
     ctxRef.current = ctx
     startedRef.current = true
 
-    // ── 明るいファンファーレコード進行: C→E→G→C（上昇）繰り返し ──
     const fanfareChords = [
-      [523, 659, 784],   // C major
-      [587, 740, 880],   // D major
-      [659, 830, 988],   // E major
-      [698, 880, 1047],  // F major
+      [523, 659, 784],
+      [587, 740, 880],
+      [659, 830, 988],
+      [698, 880, 1047],
     ]
     let chordIdx = 0
     const playFanfareChord = () => {
@@ -81,7 +113,6 @@ function useFestiveBgm(enabled: boolean) {
     const chordInterval = setInterval(playFanfareChord, 3000)
     intervalsRef.current.push(chordInterval)
 
-    // ── きらきらグロッケンシュピール風 高音アルペジオ ──
     const glockNotes = [1047, 1175, 1319, 1568, 1760, 2093]
     const scheduleGlock = () => {
       if (!ctxRef.current) return
@@ -106,7 +137,6 @@ function useFestiveBgm(enabled: boolean) {
     const t1 = setTimeout(scheduleGlock, 200)
     timersRef.current.push(t1)
 
-    // ── 軽快なリズム打楽器風パルス ──
     const scheduleRhythm = () => {
       if (!ctxRef.current) return
       const c = ctxRef.current
@@ -130,7 +160,6 @@ function useFestiveBgm(enabled: boolean) {
     const t2 = setTimeout(scheduleRhythm, 500)
     timersRef.current.push(t2)
 
-    // ── 上昇するファンファーレ フレーズ（8秒ごと） ──
     const playFanfarePhrase = () => {
       if (!ctxRef.current) return
       const c = ctxRef.current
@@ -156,7 +185,6 @@ function useFestiveBgm(enabled: boolean) {
 
   useEffect(() => {
     if (enabled) {
-      // トグルのクリック自体がユーザー操作なので即時起動
       start()
     } else {
       stopAll()
@@ -170,7 +198,7 @@ function useFestiveBgm(enabled: boolean) {
 }
 
 export default function PraisesPage() {
-  const [praises, setPraises] = useState<Praise[]>([])
+  const [allPraises, setAllPraises] = useState<Praise[]>([])
   const [members, setMembers] = useState<Member[]>([])
   const [selectedMemberId, setSelectedMemberId] = useState<string>('')
   const [loading, setLoading] = useState(true)
@@ -178,21 +206,13 @@ export default function PraisesPage() {
 
   useFestiveBgm(bgmEnabled)
 
-  useEffect(() => {
-    const url = selectedMemberId
-      ? `/api/praises?member_id=${selectedMemberId}&limit=100`
-      : '/api/praises?limit=100'
-    fetch(url)
-      .then((r) => r.json())
-      .then(setPraises)
-      .catch(() => {})
-      .finally(() => setLoading(false))
-  }, [selectedMemberId])
-
+  // 全件取得（グループ化・フィルターをフロントで行う）
   useEffect(() => {
     fetch('/api/praises?limit=500')
       .then((r) => r.json())
       .then((data: Praise[]) => {
+        setAllPraises(data)
+        // メンバー一覧の集計
         const seen = new Map<string, Member>()
         data.forEach((p) => {
           if (p.members && !seen.has(p.member_id)) {
@@ -202,7 +222,14 @@ export default function PraisesPage() {
         setMembers(Array.from(seen.values()).sort((a, b) => a.name.localeCompare(b.name, 'ja')))
       })
       .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
+
+  // グループ化してからフィルター適用
+  const groupedPraises = groupPraises(allPraises)
+  const filteredGroups = selectedMemberId
+    ? groupedPraises.filter((g) => g.members.some((m) => m.id === selectedMemberId))
+    : groupedPraises
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -220,9 +247,9 @@ export default function PraisesPage() {
         <main className="flex-1 px-4 pb-24 max-w-2xl mx-auto w-full">
           <h1 className="gradient-text font-black mb-6 text-center" style={{ fontSize: 28 }}>
             これまでのほめ 🎊
-            {praises.length > 0 && (
+            {filteredGroups.length > 0 && (
               <span style={{ fontSize: 15, fontWeight: 400, color: '#B8B0D0', marginLeft: 8, background: 'none', WebkitTextFillColor: '#B8B0D0' }}>
-                {praises.length}件
+                {filteredGroups.length}件
               </span>
             )}
           </h1>
@@ -263,7 +290,7 @@ export default function PraisesPage() {
           {/* ほめ一覧 */}
           {loading ? (
             <div className="text-center py-16" style={{ color: '#B8B0D0' }}>読み込み中…</div>
-          ) : praises.length === 0 ? (
+          ) : filteredGroups.length === 0 ? (
             <div className="text-center py-16">
               <div style={{ fontSize: 48 }}>💐</div>
               <p style={{ color: '#B8B0D0', marginTop: 12 }}>まだほめがありません</p>
@@ -271,21 +298,38 @@ export default function PraisesPage() {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              {praises.map((praise) => (
+              {filteredGroups.map((group) => (
                 <div
-                  key={praise.id}
+                  key={group.id}
                   className="glass-card px-5 py-4"
                   style={{ borderTop: '3px solid transparent', borderImage: 'linear-gradient(135deg, #FF6B9D, #C084FC) 1' }}
                 >
                   <div className="flex items-start gap-3">
-                    {praise.members && <Avatar name={praise.members.name} size={44} />}
+                    {/* 複数人のときはアバターを重ねて表示 */}
+                    <div className="flex-shrink-0" style={{ position: 'relative', width: 44, height: 44 }}>
+                      {group.members.slice(0, 3).map((m, i) => (
+                        <div
+                          key={m.id}
+                          style={{
+                            position: i === 0 ? 'relative' : 'absolute',
+                            top: i === 0 ? 0 : i * 6,
+                            left: i === 0 ? 0 : i * 6,
+                            zIndex: 3 - i,
+                            outline: i > 0 ? '2px solid rgba(26,16,48,0.9)' : 'none',
+                            borderRadius: '50%',
+                          }}
+                        >
+                          <Avatar name={m.name} size={i === 0 ? 44 : 32} />
+                        </div>
+                      ))}
+                    </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span style={{ fontWeight: 700, color: '#F5F3FF', fontSize: 15 }}>
-                          {praise.members?.name ?? '不明'}
+                          {group.members.map((m) => m.name).join('・')}
                         </span>
-                        <span style={{ fontSize: 20 }}>{getRandomEmoji(praise.id)}</span>
-                        {praise.source === 'slack' && (
+                        <span style={{ fontSize: 20 }}>{getRandomEmoji(group.id)}</span>
+                        {group.source === 'slack' && (
                           <span
                             className="px-2 py-0.5 rounded-full text-xs"
                             style={{ background: 'rgba(96, 195, 255, 0.2)', color: '#60C3FF' }}
@@ -295,10 +339,10 @@ export default function PraisesPage() {
                         )}
                       </div>
                       <p style={{ color: '#F5F3FF', fontSize: 14, lineHeight: 1.6, wordBreak: 'break-word' }}>
-                        {praise.message}
+                        {group.message}
                       </p>
                       <p style={{ color: '#B8B0D0', fontSize: 12, marginTop: 8 }}>
-                        📝 匿名の誰かより · {formatDate(praise.created_at)}
+                        📝 匿名の誰かより · {formatDate(group.created_at)}
                       </p>
                     </div>
                   </div>

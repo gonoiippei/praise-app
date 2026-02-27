@@ -10,5 +10,7 @@ export interface Praise {
   message: string
   source: 'web' | 'slack'
   created_at: string
+  group_id: string | null
+  is_primary: boolean
   members?: Member
 }

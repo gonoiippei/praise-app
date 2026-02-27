@@ -12,10 +12,11 @@ export async function GET() {
   const today = new Date(jstNow.getTime() - 9 * 60 * 60 * 1000)
 
   const [totalResult, todayResult] = await Promise.all([
-    supabase.from('praises').select('id', { count: 'exact', head: true }),
+    supabase.from('praises').select('id', { count: 'exact', head: true }).eq('is_primary', true),
     supabase
       .from('praises')
       .select('id', { count: 'exact', head: true })
+      .eq('is_primary', true)
       .gte('created_at', today.toISOString()),
   ])
 
