@@ -7,6 +7,41 @@ import GlowOrbs from '@/components/GlowOrbs'
 import BgmController from '@/components/BgmController'
 import { Member } from '@/types'
 
+function MemberPill({
+  member,
+  isSelected,
+  isMaxReached,
+  onToggle,
+}: {
+  member: Member
+  isSelected: boolean
+  isMaxReached: boolean
+  onToggle: (m: Member) => void
+}) {
+  return (
+    <button
+      onClick={() => onToggle(member)}
+      disabled={isMaxReached}
+      style={{
+        padding: '6px 16px',
+        borderRadius: 50,
+        fontSize: 13,
+        fontWeight: isSelected ? 700 : 400,
+        background: isSelected
+          ? 'linear-gradient(135deg, #FF6B9D, #C084FC)'
+          : 'rgba(255,255,255,0.08)',
+        color: isMaxReached ? '#4A4060' : '#F5F3FF',
+        border: isSelected ? '1px solid transparent' : '1px solid rgba(255,255,255,0.15)',
+        transition: 'all 0.15s',
+        cursor: isMaxReached ? 'not-allowed' : 'pointer',
+        opacity: isMaxReached ? 0.4 : 1,
+      }}
+    >
+      {member.name}
+    </button>
+  )
+}
+
 interface Petal {
   id: number
   left: number
@@ -77,6 +112,37 @@ function playChurchBell(audioCtx: AudioContext) {
 const PETAL_COLORS = ['#FF6B9D', '#FF9F43', '#C084FC', '#FFD43B', '#FF8FAB']
 const MAX_MEMBERS = 10
 
+const TEAM_GROUPS = [
+  {
+    label: '経営チーム',
+    names: ['枌谷力', '今西毅寿'],
+  },
+  {
+    label: 'レベニューチーム',
+    names: ['小林聖子', '丸山恋', '仲野翔也', '荒川翔太'],
+  },
+  {
+    label: 'バックオフィスチーム',
+    names: ['古口真凜', '竹村恵', '菅野那津子', '仁尾雅子'],
+  },
+  {
+    label: 'AI/DXチーム',
+    names: ['酒井琢郎', '野村輝', '金伯冠'],
+  },
+  {
+    label: 'Aチーム',
+    names: ['奥原美穂子', '大舘仁志', '宇都宮友之祐', '岡本早樹', '岡田大悟', '西岡紀子', '吉池千尋', '瀬尾友里恵', '金誠俊'],
+  },
+  {
+    label: 'Bチーム',
+    names: ['野上恵里', '中島碧', '野井裕美', '本山太志', '江田哲也', '三原星芳', '板垣琴音', '川名子紗依', '小菅広大', '五ノ井一平', '真鍋知優', '星山かなた', '永松奈央美', '竹内快斗'],
+  },
+  {
+    label: 'Dチーム',
+    names: ['高橋慶', '川道優輝', '林崎優吾', '平城舞子', '早見真由', '廣瀨弥礼', '池田彩華', '山川優理子', '長田太彪'],
+  },
+]
+
 export default function SendPage() {
   const router = useRouter()
   const [members, setMembers] = useState<Member[]>([])
@@ -90,11 +156,15 @@ export default function SendPage() {
   const petalIdRef = useRef(0)
 
   useEffect(() => {
-    fetch(`/api/members?q=${encodeURIComponent(searchQuery)}`)
+    fetch('/api/members')
       .then((r) => r.json())
       .then(setMembers)
       .catch(() => {})
-  }, [searchQuery])
+  }, [])
+
+  const filteredMembers = searchQuery
+    ? members.filter((m) => m.name.includes(searchQuery))
+    : []
 
   const toggleMember = (member: Member) => {
     setSelectedMembers((prev) => {
@@ -254,39 +324,52 @@ export default function SendPage() {
             />
           </div>
 
-          {/* メンバー ピル型タグ */}
-          <div className="mb-6 overflow-y-auto" style={{ maxHeight: 220 }}>
+          {/* メンバー選択エリア */}
+          <div className="mb-6 overflow-y-auto" style={{ maxHeight: 300 }}>
             {members.length === 0 ? (
-              <p style={{ color: '#6E6490', fontSize: 14 }}>メンバーが見つかりません</p>
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {members.map((member) => {
-                  const isSelected = selectedMembers.some((m) => m.id === member.id)
-                  const isMaxReached = selectedMembers.length >= MAX_MEMBERS && !isSelected
-                  return (
-                    <button
+              <p style={{ color: '#6E6490', fontSize: 14 }}>読み込み中...</p>
+            ) : searchQuery ? (
+              /* 検索中：フラットに表示 */
+              filteredMembers.length === 0 ? (
+                <p style={{ color: '#6E6490', fontSize: 14 }}>見つかりません</p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {filteredMembers.map((member) => (
+                    <MemberPill
                       key={member.id}
-                      onClick={() => toggleMember(member)}
-                      disabled={isMaxReached}
-                      style={{
-                        padding: '6px 16px',
-                        borderRadius: 50,
-                        fontSize: 13,
-                        fontWeight: isSelected ? 700 : 400,
-                        background: isSelected
-                          ? 'linear-gradient(135deg, #FF6B9D, #C084FC)'
-                          : 'rgba(255,255,255,0.08)',
-                        color: isMaxReached ? '#4A4060' : '#F5F3FF',
-                        border: isSelected
-                          ? '1px solid transparent'
-                          : '1px solid rgba(255,255,255,0.15)',
-                        transition: 'all 0.15s',
-                        cursor: isMaxReached ? 'not-allowed' : 'pointer',
-                        opacity: isMaxReached ? 0.4 : 1,
-                      }}
-                    >
-                      {member.name}
-                    </button>
+                      member={member}
+                      isSelected={selectedMembers.some((m) => m.id === member.id)}
+                      isMaxReached={selectedMembers.length >= MAX_MEMBERS && !selectedMembers.some((m) => m.id === member.id)}
+                      onToggle={toggleMember}
+                    />
+                  ))}
+                </div>
+              )
+            ) : (
+              /* 通常：チーム別に表示 */
+              <div className="flex flex-col gap-4">
+                {TEAM_GROUPS.map((group) => {
+                  const groupMembers = group.names
+                    .map((name) => members.find((m) => m.name === name))
+                    .filter(Boolean) as Member[]
+                  if (groupMembers.length === 0) return null
+                  return (
+                    <div key={group.label}>
+                      <div style={{ color: '#6E6490', fontSize: 11, fontWeight: 700, marginBottom: 8, letterSpacing: '0.08em' }}>
+                        {group.label}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {groupMembers.map((member) => (
+                          <MemberPill
+                            key={member.id}
+                            member={member}
+                            isSelected={selectedMembers.some((m) => m.id === member.id)}
+                            isMaxReached={selectedMembers.length >= MAX_MEMBERS && !selectedMembers.some((m) => m.id === member.id)}
+                            onToggle={toggleMember}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   )
                 })}
               </div>
