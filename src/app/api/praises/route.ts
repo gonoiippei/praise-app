@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 
   let queryBuilder = supabase
     .from('praises')
-    .select('*, members(id, name)')
+    .select('*, members(id, name, slack_user_id)')
     .order('created_at', { ascending: false })
     .limit(limit)
 
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
   const { data, error } = await supabase
     .from('praises')
     .insert(rows)
-    .select('*, members(id, name)')
+    .select('*, members(id, name, slack_user_id)')
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
@@ -61,15 +61,19 @@ export async function POST(request: NextRequest) {
   // Slack に通知（1通にまとめる）
   const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL
   if (slackWebhookUrl && data && data.length > 0) {
-    const memberNames = data.map((d) => (d.members as { name: string } | null)?.name).filter(Boolean) as string[]
+    const memberNames = data.map((d) => (d.members as { name: string; slack_user_id?: string | null } | null)?.name).filter(Boolean) as string[]
     const namesText = memberNames.join('・')
+    const slackUserIds = data
+      .map((d) => (d.members as { slack_user_id?: string | null } | null)?.slack_user_id)
+      .filter(Boolean) as string[]
+    const mentionsText = slackUserIds.map((uid) => `<@${uid}>`).join(' ')
     const appUrl = 'https://praise-app-omega.vercel.app'
     try {
       await fetch(slackWebhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `🎉 ${namesText} さんがほめられました！`,
+          text: `🎉 ${namesText} さんがほめられました！${mentionsText ? ` ${mentionsText}` : ''}`,
           blocks: [
             {
               type: 'section',
@@ -86,6 +90,13 @@ export async function POST(request: NextRequest) {
                 emoji: true,
               },
             },
+            ...(mentionsText ? [{
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `👆 ${mentionsText} に届きました！`,
+              },
+            }] : []),
             {
               type: 'section',
               text: {
