@@ -127,7 +127,7 @@ const TEAM_GROUPS = [
   },
   {
     label: 'AI/DXチーム',
-    names: ['酒井琢郎', '野村輝', '金伯冠'],
+    names: ['酒井琢郎', '野村輝', '金伯冠', 'AI/DXチーム'],
   },
   {
     label: 'Aチーム',
