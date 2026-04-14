@@ -12,6 +12,8 @@ export default function MembersPage() {
   const [newName, setNewName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [editingSlackId, setEditingSlackId] = useState<string | null>(null)
+  const [slackIdInput, setSlackIdInput] = useState('')
 
   const fetchMembers = (q = '') => {
     fetch(`/api/members?q=${encodeURIComponent(q)}`)
@@ -45,6 +47,27 @@ export default function MembersPage() {
       setError('追加に失敗しました')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleSlackIdEdit = (member: Member) => {
+    setEditingSlackId(member.id)
+    setSlackIdInput(member.slack_user_id || '')
+  }
+
+  const handleSlackIdSave = async (id: string) => {
+    try {
+      const res = await fetch(`/api/members/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slack_user_id: slackIdInput.trim() }),
+      })
+      if (res.ok) {
+        setEditingSlackId(null)
+        fetchMembers(searchQuery)
+      }
+    } catch {
+      // silent
     }
   }
 
@@ -144,23 +167,65 @@ export default function MembersPage() {
               members.map((member, i) => (
                 <div
                   key={member.id}
-                  className="flex items-center gap-3 px-4 py-3"
+                  className="px-4 py-3"
                   style={{
                     borderBottom: i < members.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
                   }}
                 >
-                  <Avatar name={member.name} size={36} />
-                  <span style={{ flex: 1, color: '#F5F3FF', fontSize: 14 }}>
-                    {member.name}
-                  </span>
-                  <button
-                    onClick={() => handleDelete(member.id, member.name)}
-                    style={{ color: '#6E6490', fontSize: 18, padding: '4px 8px' }}
-                    className="hover:text-red-400 transition-colors"
-                    title="削除"
-                  >
-                    ×
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <Avatar name={member.name} size={36} />
+                    <span style={{ flex: 1, color: '#F5F3FF', fontSize: 14 }}>
+                      {member.name}
+                    </span>
+                    <button
+                      onClick={() => handleSlackIdEdit(member)}
+                      style={{ color: '#6E6490', fontSize: 12, padding: '2px 6px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 6 }}
+                      className="hover:text-white transition-colors"
+                      title="Slack IDを設定"
+                    >
+                      {member.slack_user_id ? `@${member.slack_user_id}` : 'Slack ID'}
+                    </button>
+                    <button
+                      onClick={() => handleDelete(member.id, member.name)}
+                      style={{ color: '#6E6490', fontSize: 18, padding: '4px 8px' }}
+                      className="hover:text-red-400 transition-colors"
+                      title="削除"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  {editingSlackId === member.id && (
+                    <div className="flex gap-2 mt-2 ml-12">
+                      <input
+                        type="text"
+                        placeholder="U0123456789"
+                        value={slackIdInput}
+                        onChange={(e) => setSlackIdInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSlackIdSave(member.id)}
+                        autoFocus
+                        className="flex-1 px-3 py-1 rounded-lg"
+                        style={{
+                          background: 'rgba(255,255,255,0.08)',
+                          border: '1px solid rgba(255,255,255,0.2)',
+                          color: '#F5F3FF',
+                          fontSize: 13,
+                          outline: 'none',
+                        }}
+                      />
+                      <button
+                        onClick={() => handleSlackIdSave(member.id)}
+                        style={{ color: '#A78BFA', fontSize: 13, padding: '2px 8px' }}
+                      >
+                        保存
+                      </button>
+                      <button
+                        onClick={() => setEditingSlackId(null)}
+                        style={{ color: '#6E6490', fontSize: 13, padding: '2px 8px' }}
+                      >
+                        キャンセル
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))
             )}

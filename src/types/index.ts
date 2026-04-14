@@ -1,6 +1,7 @@
 export interface Member {
   id: string
   name: string
+  slack_user_id?: string | null
   created_at: string
 }
 

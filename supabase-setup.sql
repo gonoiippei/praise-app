@@ -7,8 +7,12 @@
 CREATE TABLE IF NOT EXISTS members (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
+  slack_user_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- 既存DBへのマイグレーション（初回セットアップ後に追加した場合はこちらを実行）
+-- ALTER TABLE members ADD COLUMN IF NOT EXISTS slack_user_id TEXT;
 
 -- praises テーブル
 CREATE TABLE IF NOT EXISTS praises (
