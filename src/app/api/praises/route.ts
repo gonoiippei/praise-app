@@ -61,42 +61,26 @@ export async function POST(request: NextRequest) {
   // Slack に通知（1通にまとめる）
   const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL
   if (slackWebhookUrl && data && data.length > 0) {
-    const memberNames = data.map((d) => (d.members as { name: string; slack_user_id?: string | null } | null)?.name).filter(Boolean) as string[]
-    const namesText = memberNames.join('・')
-    const slackUserIds = data
-      .map((d) => (d.members as { slack_user_id?: string | null } | null)?.slack_user_id)
-      .filter(Boolean) as string[]
-    const mentionsText = slackUserIds.map((uid) => `<@${uid}>`).join(' ')
+    const memberTexts = data.map((d) => {
+      const member = d.members as { name: string; slack_user_id?: string | null } | null
+      return member?.slack_user_id ? `<@${member.slack_user_id}>` : (member?.name || '')
+    }).filter(Boolean)
+    const memberTextsStr = memberTexts.join('・')
     const appUrl = 'https://praise-app-omega.vercel.app'
     try {
       await fetch(slackWebhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `🎉 ${namesText} さんがほめられました！${mentionsText ? ` ${mentionsText}` : ''}`,
+          text: `🎉 ${memberTextsStr}さんがほめられました！`,
           blocks: [
             {
               type: 'section',
               text: {
                 type: 'mrkdwn',
-                text: '✨ *ほめ通信が届きました* ✨',
+                text: `🎉 *${memberTextsStr}さんがほめられました！*`,
               },
             },
-            {
-              type: 'header',
-              text: {
-                type: 'plain_text',
-                text: `🎉 ${namesText} さんがほめられました！`,
-                emoji: true,
-              },
-            },
-            ...(mentionsText ? [{
-              type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: `👆 ${mentionsText} に届きました！`,
-              },
-            }] : []),
             {
               type: 'section',
               text: {
