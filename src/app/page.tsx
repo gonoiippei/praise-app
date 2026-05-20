@@ -171,29 +171,39 @@ export default function HomePage() {
 
         {/* ボタン */}
         <div className="flex flex-col gap-3 w-full" style={{ maxWidth: 340 }}>
-          <Link href="/send" className="block">
-            <button className="btn-main w-full py-4" style={{ fontSize: 18, borderRadius: 50 }}>
-              🔥 ほめる！
-            </button>
-          </Link>
-          <Link href="/wish-praise" className="block">
-            <button
-              className="w-full py-4"
-              style={{
-                fontSize: 18,
-                fontWeight: 700,
-                borderRadius: 50,
-                background: 'linear-gradient(135deg, #FFD43B, #FF9F43)',
-                color: '#1A1030',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                boxShadow: '0 4px 20px rgba(255, 212, 59, 0.3)',
-              }}
-            >
-              🙏 ほめてほしい！
-            </button>
-          </Link>
+          <div>
+            <p className="mb-2 text-center" style={{ color: '#B8B0D0', fontSize: 13 }}>
+              ありがとうを、こっそり届ける
+            </p>
+            <Link href="/send" className="block">
+              <button className="btn-main w-full py-4" style={{ fontSize: 18, borderRadius: 50 }}>
+                🔥 ほめる！
+              </button>
+            </Link>
+          </div>
+          <div>
+            <p className="mb-2 text-center" style={{ color: '#B8B0D0', fontSize: 13 }}>
+              がんばりに、スポットライトを
+            </p>
+            <Link href="/wish-praise" className="block">
+              <button
+                className="w-full py-4"
+                style={{
+                  fontSize: 18,
+                  fontWeight: 700,
+                  borderRadius: 50,
+                  background: 'linear-gradient(135deg, #FFD43B, #FF9F43)',
+                  color: '#1A1030',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 4px 20px rgba(255, 212, 59, 0.3)',
+                }}
+              >
+                🙏 ほめてほしい！
+              </button>
+            </Link>
+          </div>
           <Link href="/praises" className="block">
             <button className="btn-secondary w-full py-3" style={{ fontSize: 15, borderRadius: 50 }}>
               🖼 これまでのほめを見る
