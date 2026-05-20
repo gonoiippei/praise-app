@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --bg-base: #1A1030;
-  --text-main: #F5F3FF;
-  --text-muted: #B8B0D0;
-  --text-faint: #6E6490;
-  --accent-yellow: #FFD43B;
-  --accent-pink: #FF6B9D;
-  --accent-purple: #C084FC;
-  --accent-blue: #60C3FF;
-  --accent-green: #34D399;
-  --accent-orange: #FF9F43;
+  --bg-base: #FFFFFF;
+  --text-main: #1E293B;
+  --text-muted: #475569;
+  --text-faint: #94A3B8;
+  --accent-pink: #EC4899;
+  --accent-sky: #0EA5E9;
+  --accent-purple: #8B5CF6;
+  --accent-cyan: #06B6D4;
+  --accent-yellow: #F59E0B;
+  --accent-mint: #34D399;
+  --border-light: #E2E8F0;
 }
 
 @theme inline {
@@ -22,7 +23,8 @@
 }
 
 body {
-  background: linear-gradient(145deg, #1A1030 0%, #0F1A2E 50%, #1A1030 100%);
+  background: linear-gradient(160deg, #FFFFFF 0%, #E0F2FE 50%, #DBEAFE 100%);
+  background-attachment: fixed;
   color: var(--text-main);
   font-family: var(--font-zen-maru), 'Zen Maru Gothic', 'Noto Sans JP', sans-serif;
   min-height: 100vh;
@@ -33,66 +35,90 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(14, 165, 233, 0.05);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(192, 132, 252, 0.4);
+  background: rgba(14, 165, 233, 0.35);
   border-radius: 3px;
 }
 
-/* グロウオーブ */
+/* グロウオーブ（バブル） */
 .glow-orb {
   position: fixed;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(40px);
   pointer-events: none;
   z-index: 0;
 }
 
 /* カード */
 .glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(14, 165, 233, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.06);
 }
 
 /* グラデーションテキスト */
 .gradient-text {
-  background: linear-gradient(135deg, #FFD43B, #FF6B9D, #C084FC);
+  background: linear-gradient(135deg, #0EA5E9, #EC4899, #8B5CF6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* メインボタン */
+/* メインボタン（ほめる！） */
 .btn-main {
-  background: linear-gradient(135deg, #FFD43B, #FF9F43);
-  color: #1A1030;
-  font-weight: 700;
-  border-radius: 50px;
+  background: linear-gradient(135deg, #EC4899, #8B5CF6);
+  color: white;
+  font-weight: 900;
+  border-radius: 18px;
   transition: all 0.2s;
-  box-shadow: 0 4px 20px rgba(255, 212, 59, 0.3);
+  box-shadow: 0 10px 30px rgba(236, 72, 153, 0.35), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+  border: none;
+  cursor: pointer;
 }
 .btn-main:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(255, 212, 59, 0.5);
+  box-shadow: 0 14px 40px rgba(236, 72, 153, 0.45), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
 }
 .btn-main:active {
-  transform: translateY(0);
+  transform: translateY(1px);
 }
 
 /* セカンダリボタン */
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-main);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50px;
+  background: white;
+  color: #475569;
+  border: 2px solid #E2E8F0;
+  border-radius: 18px;
+  font-weight: 700;
   transition: all 0.2s;
+  cursor: pointer;
 }
 .btn-secondary:hover {
-  border-color: #C084FC;
-  background: rgba(192, 132, 252, 0.1);
+  border-color: #0EA5E9;
+  background: rgba(14, 165, 233, 0.05);
+}
+
+/* ほめてほしいボタン用（スカイブルー） */
+.btn-wish {
+  background: linear-gradient(135deg, #0EA5E9, #06B6D4);
+  color: white;
+  font-weight: 900;
+  border-radius: 18px;
+  transition: all 0.2s;
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.35), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+  border: none;
+  cursor: pointer;
+}
+.btn-wish:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(14, 165, 233, 0.45), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+}
+.btn-wish:active {
+  transform: translateY(1px);
 }
 
 /* トグルスイッチ */
@@ -105,11 +131,11 @@ body {
   transition: all 0.3s;
 }
 .toggle-switch.on {
-  background: linear-gradient(135deg, #FF6B9D, #C084FC);
-  box-shadow: 0 0 12px rgba(192, 132, 252, 0.5);
+  background: linear-gradient(135deg, #EC4899, #8B5CF6);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
 }
 .toggle-switch.off {
-  background: rgba(255, 255, 255, 0.15);
+  background: #E2E8F0;
 }
 .toggle-knob {
   width: 26px;
@@ -119,6 +145,7 @@ body {
   position: absolute;
   top: 3px;
   transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .toggle-switch.on .toggle-knob {
   left: 29px;
@@ -131,7 +158,7 @@ body {
 @keyframes float-up {
   0% {
     transform: translateY(0) rotate(0deg);
-    opacity: 0.7;
+    opacity: 0.5;
   }
   100% {
     transform: translateY(-100vh) rotate(360deg);

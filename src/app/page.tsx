@@ -61,7 +61,7 @@ export default function HomePage() {
       {milestoneCelebration && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ background: 'rgba(26, 16, 48, 0.88)', backdropFilter: 'blur(8px)' }}
+          style={{ background: 'rgba(255, 255, 255, 0.78)', backdropFilter: 'blur(10px)' }}
           onClick={() => setMilestoneCelebration(null)}
         >
           {/* 花びら */}
@@ -96,15 +96,15 @@ export default function HomePage() {
             >
               累計{milestoneCelebration}件達成！
             </h2>
-            <p style={{ color: '#F5F3FF', marginTop: 12, fontSize: 16, lineHeight: 1.8 }}>
+            <p style={{ color: '#1E293B', marginTop: 12, fontSize: 16, lineHeight: 1.8 }}>
               みんなのほめが<br />
-              <span style={{ fontWeight: 900, color: '#FFD43B' }}>{milestoneCelebration}件</span>
+              <span style={{ fontWeight: 900, color: '#F59E0B' }}>{milestoneCelebration}件</span>
               になりました🎉
             </p>
-            <p style={{ color: '#B8B0D0', marginTop: 12, fontSize: 13 }}>
+            <p style={{ color: '#475569', marginTop: 12, fontSize: 13 }}>
               ほめがめぐりめぐって、<br />この世界をちょっとだけよくしています ✨
             </p>
-            <p style={{ color: '#6E6490', marginTop: 16, fontSize: 12 }}>
+            <p style={{ color: '#94A3B8', marginTop: 16, fontSize: 12 }}>
               タップして閉じる
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function HomePage() {
 
         {/* タイトル */}
         <h1 className="font-black mb-4" style={{ lineHeight: 1.2 }}>
-          <div style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', color: '#F5F3FF' }}>
+          <div style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', color: '#0F172A' }}>
             匿名で、
           </div>
           <div
@@ -144,7 +144,7 @@ export default function HomePage() {
         </p>
 
         {/* サブテキスト */}
-        <p className="mb-8" style={{ color: '#B8B0D0', fontSize: 15, lineHeight: 1.8 }}>
+        <p className="mb-8" style={{ color: '#475569', fontSize: 15, lineHeight: 1.8 }}>
           チームの仲間に、匿名で感謝や賞賛を届けよう。<br />
           あなたの一言が、誰かの一日を変えるかも ✨
         </p>
@@ -155,16 +155,16 @@ export default function HomePage() {
             className="glass-card px-6 py-3 text-center"
             style={{ borderRadius: 50 }}
           >
-            <span style={{ color: '#F5F3FF', fontSize: 15 }}>
-              🏆 累計 <span style={{ fontWeight: 900, color: '#FFD43B' }}>{stats ? `${stats.total}件` : '…'}</span> のほめが届いています
+            <span style={{ color: '#1E293B', fontSize: 15 }}>
+              🏆 累計 <span style={{ fontWeight: 900, color: '#F59E0B' }}>{stats ? `${stats.total}件` : '…'}</span> のほめが届いています
             </span>
           </div>
           <div
             className="glass-card px-6 py-3 text-center"
             style={{ borderRadius: 50 }}
           >
-            <span style={{ color: '#F5F3FF', fontSize: 15 }}>
-              ✨ 今日は <span style={{ fontWeight: 900, color: '#FF6B9D' }}>{stats ? `${stats.today}件` : '…'}</span> のほめが生まれました！
+            <span style={{ color: '#1E293B', fontSize: 15 }}>
+              ✨ 今日は <span style={{ fontWeight: 900, color: '#EC4899' }}>{stats ? `${stats.today}件` : '…'}</span> のほめが生まれました！
             </span>
           </div>
         </div>
@@ -172,40 +172,27 @@ export default function HomePage() {
         {/* ボタン */}
         <div className="flex flex-col gap-3 w-full" style={{ maxWidth: 340 }}>
           <div>
-            <p className="mb-2 text-center" style={{ color: '#B8B0D0', fontSize: 13 }}>
+            <p className="mb-2 text-center" style={{ color: '#64748B', fontSize: 13 }}>
               ありがとうを、こっそり届ける
             </p>
             <Link href="/send" className="block">
-              <button className="btn-main w-full py-4" style={{ fontSize: 18, borderRadius: 50 }}>
+              <button className="btn-main w-full py-4" style={{ fontSize: 18 }}>
                 🔥 ほめる！
               </button>
             </Link>
           </div>
           <div>
-            <p className="mb-2 text-center" style={{ color: '#B8B0D0', fontSize: 13 }}>
+            <p className="mb-2 text-center" style={{ color: '#64748B', fontSize: 13 }}>
               がんばりに、スポットライトを
             </p>
             <Link href="/wish-praise" className="block">
-              <button
-                className="w-full py-4"
-                style={{
-                  fontSize: 18,
-                  fontWeight: 700,
-                  borderRadius: 50,
-                  background: 'linear-gradient(135deg, #FFD43B, #FF9F43)',
-                  color: '#1A1030',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  boxShadow: '0 4px 20px rgba(255, 212, 59, 0.3)',
-                }}
-              >
+              <button className="btn-wish w-full py-4" style={{ fontSize: 18 }}>
                 🙏 ほめてほしい！
               </button>
             </Link>
           </div>
           <Link href="/praises" className="block">
-            <button className="btn-secondary w-full py-3" style={{ fontSize: 15, borderRadius: 50 }}>
+            <button className="btn-secondary w-full py-3" style={{ fontSize: 15 }}>
               🖼 これまでのほめを見る
             </button>
           </Link>
@@ -214,8 +201,8 @@ export default function HomePage() {
         {/* メンバー管理（下部） */}
         <Link
           href="/members"
-          className="mt-8 hover:text-white transition-colors"
-          style={{ color: '#6E6490', fontSize: 13 }}
+          className="mt-8 hover:text-slate-800 transition-colors"
+          style={{ color: '#94A3B8', fontSize: 13 }}
         >
           ⚙ メンバー管理
         </Link>

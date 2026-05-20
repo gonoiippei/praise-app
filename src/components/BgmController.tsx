@@ -133,12 +133,12 @@ export default function BgmController({ enabled, onToggle }: BgmControllerProps)
   return (
     <div className="flex items-center gap-3">
       {!enabled && (
-        <span style={{ color: '#B8B0D0', fontSize: 13, maxWidth: 160, lineHeight: 1.4, textAlign: 'right' }}>
+        <span style={{ color: '#64748B', fontSize: 13, maxWidth: 160, lineHeight: 1.4, textAlign: 'right' }}>
           オンにすると素敵な音楽が流れます♪
         </span>
       )}
       {enabled && (
-        <span style={{ color: '#C084FC', fontSize: 13, lineHeight: 1.4 }}>
+        <span style={{ color: '#EC4899', fontSize: 13, lineHeight: 1.4 }}>
           ♪ 音楽が流れています
         </span>
       )}
@@ -147,7 +147,7 @@ export default function BgmController({ enabled, onToggle }: BgmControllerProps)
         className="flex items-center gap-2"
         title={enabled ? 'BGMをOFF' : 'BGMをON'}
       >
-        <span style={{ color: '#B8B0D0', fontSize: 14, fontWeight: 700 }}>BGM</span>
+        <span style={{ color: '#475569', fontSize: 14, fontWeight: 700 }}>BGM</span>
         <div className={`toggle-switch ${enabled ? 'on' : 'off'}`}>
           <div className="toggle-knob" />
         </div>
