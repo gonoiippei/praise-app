@@ -28,13 +28,14 @@ function MemberPill({
         fontSize: 13,
         fontWeight: isSelected ? 700 : 400,
         background: isSelected
-          ? 'linear-gradient(135deg, #FF6B9D, #C084FC)'
-          : 'rgba(255,255,255,0.08)',
-        color: isMaxReached ? '#4A4060' : '#F5F3FF',
-        border: isSelected ? '1px solid transparent' : '1px solid rgba(255,255,255,0.15)',
+          ? 'linear-gradient(135deg, #EC4899, #8B5CF6)'
+          : 'white',
+        color: isSelected ? 'white' : isMaxReached ? '#CBD5E1' : '#1E293B',
+        border: isSelected ? '1px solid transparent' : '1px solid #E2E8F0',
         transition: 'all 0.15s',
         cursor: isMaxReached ? 'not-allowed' : 'pointer',
-        opacity: isMaxReached ? 0.4 : 1,
+        opacity: isMaxReached ? 0.5 : 1,
+        boxShadow: isSelected ? '0 4px 12px rgba(236, 72, 153, 0.3)' : '0 1px 3px rgba(0,0,0,0.04)',
       }}
     >
       {member.name}
@@ -264,17 +265,17 @@ export default function SendPage() {
       {showPopup && (
         <div
           className="fixed inset-0 z-30 flex items-center justify-center"
-          style={{ background: 'rgba(26, 16, 48, 0.85)', backdropFilter: 'blur(8px)' }}
+          style={{ background: 'rgba(255, 255, 255, 0.78)', backdropFilter: 'blur(10px)' }}
         >
           <div className="glass-card popup-animate text-center px-10 py-12" style={{ maxWidth: 400 }}>
             <div style={{ fontSize: 64 }}>🎉</div>
             <h2 className="gradient-text font-black mt-4" style={{ fontSize: 28 }}>
               ほめを届けました！
             </h2>
-            <p style={{ color: '#B8B0D0', marginTop: 12, fontSize: 14, lineHeight: 1.8 }}>
+            <p style={{ color: '#475569', marginTop: 12, fontSize: 14, lineHeight: 1.8 }}>
               {selectedNamesText}へ送りました
             </p>
-            <p style={{ color: '#6E6490', marginTop: 8, fontSize: 13 }}>
+            <p style={{ color: '#94A3B8', marginTop: 8, fontSize: 13 }}>
               3秒後に一覧ページへ移動します…
             </p>
           </div>
@@ -286,8 +287,8 @@ export default function SendPage() {
         <header className="flex items-center justify-between px-6 py-4">
           <Link
             href="/"
-            style={{ color: '#B8B0D0', fontSize: 14 }}
-            className="hover:text-white transition-colors"
+            style={{ color: '#475569', fontSize: 14 }}
+            className="hover:text-slate-800 transition-colors"
           >
             ← ホームに戻る
           </Link>
@@ -297,25 +298,25 @@ export default function SendPage() {
         <main className="flex-1 px-4 pb-8 w-full" style={{ maxWidth: 560, margin: '0 auto' }}>
 
           {/* タイトル */}
-          <h1 className="font-black mb-1" style={{ fontSize: 26, color: '#F5F3FF' }}>
+          <h1 className="font-black mb-1" style={{ fontSize: 26, color: '#1E293B' }}>
             ほめを届ける 🎁
           </h1>
-          <p className="mb-6" style={{ color: '#B8B0D0', fontSize: 14 }}>
+          <p className="mb-6" style={{ color: '#475569', fontSize: 14 }}>
             あなたの名前は相手に伝わりません。気軽にどうぞ！
           </p>
 
           {/* 誰をほめる？ */}
           <div className="flex items-center gap-2 mb-2">
-            <span style={{ color: '#FF6B9D', fontSize: 14, fontWeight: 700 }}>
+            <span style={{ color: '#EC4899', fontSize: 14, fontWeight: 700 }}>
               🎯 誰をほめる？
             </span>
-            <span style={{ color: '#6E6490', fontSize: 12 }}>
+            <span style={{ color: '#94A3B8', fontSize: 12 }}>
               （最大{MAX_MEMBERS}人まで選べます）
             </span>
             {selectedMembers.length > 0 && (
               <span style={{
                 marginLeft: 'auto',
-                color: '#C084FC',
+                color: '#8B5CF6',
                 fontSize: 12,
                 fontWeight: 700,
               }}>
@@ -333,9 +334,9 @@ export default function SendPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-4 py-3 rounded-2xl"
               style={{
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                color: '#F5F3FF',
+                background: 'white',
+                border: '1px solid #E2E8F0',
+                color: '#1E293B',
                 fontSize: 14,
                 outline: 'none',
               }}
@@ -345,11 +346,11 @@ export default function SendPage() {
           {/* メンバー選択エリア */}
           <div className="mb-6 overflow-y-auto" style={{ maxHeight: 300 }}>
             {members.length === 0 ? (
-              <p style={{ color: '#6E6490', fontSize: 14 }}>読み込み中...</p>
+              <p style={{ color: '#94A3B8', fontSize: 14 }}>読み込み中...</p>
             ) : searchQuery ? (
               /* 検索中：フラットに表示 */
               filteredMembers.length === 0 ? (
-                <p style={{ color: '#6E6490', fontSize: 14 }}>見つかりません</p>
+                <p style={{ color: '#94A3B8', fontSize: 14 }}>見つかりません</p>
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {filteredMembers.map((member) => (
@@ -373,7 +374,7 @@ export default function SendPage() {
                   if (groupMembers.length === 0) return null
                   return (
                     <div key={group.label}>
-                      <div style={{ color: '#6E6490', fontSize: 11, fontWeight: 700, marginBottom: 8, letterSpacing: '0.08em' }}>
+                      <div style={{ color: '#94A3B8', fontSize: 11, fontWeight: 700, marginBottom: 8, letterSpacing: '0.08em' }}>
                         {group.label}
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -395,7 +396,7 @@ export default function SendPage() {
           </div>
 
           {/* メッセージ */}
-          <div className="mb-2" style={{ color: '#B8B0D0', fontSize: 14, fontWeight: 700 }}>
+          <div className="mb-2" style={{ color: '#475569', fontSize: 14, fontWeight: 700 }}>
             💬 メッセージ
           </div>
           <div className="mb-6">
@@ -411,15 +412,15 @@ export default function SendPage() {
               disabled={selectedMembers.length === 0}
               className="w-full px-4 py-3 rounded-2xl resize-none"
               style={{
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                color: '#F5F3FF',
+                background: 'white',
+                border: '1px solid #E2E8F0',
+                color: '#1E293B',
                 fontSize: 14,
                 outline: 'none',
                 opacity: selectedMembers.length > 0 ? 1 : 0.6,
               }}
             />
-            <div className="text-right mt-1" style={{ color: '#6E6490', fontSize: 12 }}>
+            <div className="text-right mt-1" style={{ color: '#94A3B8', fontSize: 12 }}>
               {message.length} 文字
             </div>
           </div>
@@ -431,16 +432,16 @@ export default function SendPage() {
             className="w-full py-4"
             style={{
               fontSize: 17,
-              fontWeight: 700,
-              borderRadius: 50,
+              fontWeight: 900,
+              borderRadius: 18,
               background: canSubmit
-                ? 'linear-gradient(135deg, #FFD43B, #FF9F43)'
-                : 'rgba(255,255,255,0.1)',
-              color: canSubmit ? '#1A1030' : '#6E6490',
+                ? 'linear-gradient(135deg, #EC4899, #8B5CF6)'
+                : '#E2E8F0',
+              color: canSubmit ? 'white' : '#94A3B8',
               border: 'none',
               cursor: canSubmit ? 'pointer' : 'not-allowed',
               transition: 'all 0.2s',
-              boxShadow: canSubmit ? '0 4px 20px rgba(255, 212, 59, 0.3)' : 'none',
+              boxShadow: canSubmit ? '0 10px 30px rgba(236, 72, 153, 0.35)' : 'none',
             }}
           >
             {loading ? '送信中…' : `🍊 匿名でほめる！${selectedMembers.length > 1 ? `（${selectedMembers.length}人）` : ''}`}

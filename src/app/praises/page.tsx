@@ -238,7 +238,7 @@ export default function PraisesPage() {
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* ヘッダー */}
         <header className="flex items-center justify-between px-6 py-4">
-          <Link href="/" style={{ color: '#B8B0D0', fontSize: 14 }} className="hover:text-white transition-colors">
+          <Link href="/" style={{ color: '#475569', fontSize: 14 }} className="hover:text-slate-800 transition-colors">
             ← ホームへ
           </Link>
           <BgmController enabled={bgmEnabled} onToggle={() => setBgmEnabled((v) => !v)} />
@@ -248,7 +248,7 @@ export default function PraisesPage() {
           <h1 className="gradient-text font-black mb-6 text-center" style={{ fontSize: 28 }}>
             これまでのほめ 🎊
             {filteredGroups.length > 0 && (
-              <span style={{ fontSize: 15, fontWeight: 400, color: '#B8B0D0', marginLeft: 8, background: 'none', WebkitTextFillColor: '#B8B0D0' }}>
+              <span style={{ fontSize: 15, fontWeight: 400, color: '#64748B', marginLeft: 8, background: 'none', WebkitTextFillColor: '#64748B' }}>
                 {filteredGroups.length}件
               </span>
             )}
@@ -261,10 +261,11 @@ export default function PraisesPage() {
                 onClick={() => setSelectedMemberId('')}
                 className="px-3 py-1 rounded-full text-sm transition-all"
                 style={{
-                  background: selectedMemberId === '' ? 'linear-gradient(135deg, #FF6B9D, #C084FC)' : 'rgba(255,255,255,0.08)',
-                  color: '#F5F3FF',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  background: selectedMemberId === '' ? 'linear-gradient(135deg, #EC4899, #8B5CF6)' : 'white',
+                  color: selectedMemberId === '' ? 'white' : '#1E293B',
+                  border: selectedMemberId === '' ? '1px solid transparent' : '1px solid #E2E8F0',
                   fontWeight: selectedMemberId === '' ? 700 : 400,
+                  boxShadow: selectedMemberId === '' ? '0 4px 12px rgba(236, 72, 153, 0.3)' : '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 すべて
@@ -275,10 +276,11 @@ export default function PraisesPage() {
                   onClick={() => setSelectedMemberId(m.id)}
                   className="px-3 py-1 rounded-full text-sm transition-all"
                   style={{
-                    background: selectedMemberId === m.id ? 'linear-gradient(135deg, #FF6B9D, #C084FC)' : 'rgba(255,255,255,0.08)',
-                    color: '#F5F3FF',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: selectedMemberId === m.id ? 'linear-gradient(135deg, #EC4899, #8B5CF6)' : 'white',
+                    color: selectedMemberId === m.id ? 'white' : '#1E293B',
+                    border: selectedMemberId === m.id ? '1px solid transparent' : '1px solid #E2E8F0',
                     fontWeight: selectedMemberId === m.id ? 700 : 400,
+                    boxShadow: selectedMemberId === m.id ? '0 4px 12px rgba(236, 72, 153, 0.3)' : '0 1px 3px rgba(0,0,0,0.04)',
                   }}
                 >
                   {m.name}
@@ -289,12 +291,12 @@ export default function PraisesPage() {
 
           {/* ほめ一覧 */}
           {loading ? (
-            <div className="text-center py-16" style={{ color: '#B8B0D0' }}>読み込み中…</div>
+            <div className="text-center py-16" style={{ color: '#475569' }}>読み込み中…</div>
           ) : filteredGroups.length === 0 ? (
             <div className="text-center py-16">
               <div style={{ fontSize: 48 }}>💐</div>
-              <p style={{ color: '#B8B0D0', marginTop: 12 }}>まだほめがありません</p>
-              <p style={{ color: '#6E6490', fontSize: 13, marginTop: 8 }}>最初のほめを送ってみよう！</p>
+              <p style={{ color: '#475569', marginTop: 12 }}>まだほめがありません</p>
+              <p style={{ color: '#94A3B8', fontSize: 13, marginTop: 8 }}>最初のほめを送ってみよう！</p>
             </div>
           ) : (
             <div className="flex flex-col gap-4">
@@ -302,7 +304,7 @@ export default function PraisesPage() {
                 <div
                   key={group.id}
                   className="glass-card px-5 py-4"
-                  style={{ borderTop: '3px solid transparent', borderImage: 'linear-gradient(135deg, #FF6B9D, #C084FC) 1' }}
+                  style={{ borderTop: '3px solid transparent', borderImage: 'linear-gradient(135deg, #EC4899, #8B5CF6) 1' }}
                 >
                   <div className="flex items-start gap-3">
                     {/* 複数人のときはアバターを重ねて表示 */}
@@ -315,7 +317,7 @@ export default function PraisesPage() {
                             top: i === 0 ? 0 : i * 6,
                             left: i === 0 ? 0 : i * 6,
                             zIndex: 3 - i,
-                            outline: i > 0 ? '2px solid rgba(26,16,48,0.9)' : 'none',
+                            outline: i > 0 ? '2px solid white' : 'none',
                             borderRadius: '50%',
                           }}
                         >
@@ -325,23 +327,23 @@ export default function PraisesPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span style={{ fontWeight: 700, color: '#F5F3FF', fontSize: 15 }}>
+                        <span style={{ fontWeight: 700, color: '#1E293B', fontSize: 15 }}>
                           {group.members.map((m) => m.name).join('・')}
                         </span>
                         <span style={{ fontSize: 20 }}>{getRandomEmoji(group.id)}</span>
                         {group.source === 'slack' && (
                           <span
                             className="px-2 py-0.5 rounded-full text-xs"
-                            style={{ background: 'rgba(96, 195, 255, 0.2)', color: '#60C3FF' }}
+                            style={{ background: 'rgba(14, 165, 233, 0.12)', color: '#0EA5E9', fontWeight: 700 }}
                           >
                             Slack
                           </span>
                         )}
                       </div>
-                      <p style={{ color: '#F5F3FF', fontSize: 14, lineHeight: 1.6, wordBreak: 'break-word' }}>
+                      <p style={{ color: '#1E293B', fontSize: 14, lineHeight: 1.6, wordBreak: 'break-word' }}>
                         {group.message}
                       </p>
-                      <p style={{ color: '#B8B0D0', fontSize: 12, marginTop: 8 }}>
+                      <p style={{ color: '#475569', fontSize: 12, marginTop: 8 }}>
                         📝 匿名の誰かより · {formatDate(group.created_at)}
                       </p>
                     </div>
@@ -365,7 +367,7 @@ export default function PraisesPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 30px rgba(255, 212, 59, 0.4)',
+            boxShadow: '0 8px 30px rgba(236, 72, 153, 0.4)',
           }}
           title="ほめる"
         >
