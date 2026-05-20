@@ -148,6 +148,15 @@ const TEAM_GROUPS = [
   },
 ]
 
+// 送信完了ポップアップのバリエーション
+const POPUP_PATTERNS: { emoji: string; message: string }[] = [
+  { emoji: '🙏', message: 'ほめてくれて、ありがとう' },
+  { emoji: '🔍', message: '誰かのいいところに気づける、その目がいい' },
+  { emoji: '✍', message: '言葉にして送れる人、けっこう貴重です' },
+  { emoji: '✨', message: 'あなたのほめが、誰かの今日を少し変えます' },
+  { emoji: '🪞', message: '誰かをほめると、自分も少し整います' },
+]
+
 export default function SendPage() {
   const router = useRouter()
   const [members, setMembers] = useState<Member[]>([])
@@ -156,6 +165,7 @@ export default function SendPage() {
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
+  const [popupPattern, setPopupPattern] = useState(POPUP_PATTERNS[0])
   const [petals, setPetals] = useState<Petal[]>([])
   const [bgmEnabled, setBgmEnabled] = useState(false)
   const petalIdRef = useRef(0)
@@ -218,6 +228,8 @@ export default function SendPage() {
         color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
       }))
       setPetals(newPetals)
+      // ランダムにポップアップパターンを選択
+      setPopupPattern(POPUP_PATTERNS[Math.floor(Math.random() * POPUP_PATTERNS.length)])
       setShowPopup(true)
 
       setTimeout(() => {
@@ -234,8 +246,8 @@ export default function SendPage() {
 
   // ポップアップ用の名前表示
   const selectedNamesText = selectedMembers.length === 1
-    ? `${selectedMembers[0].name} さん`
-    : `${selectedMembers.map((m) => m.name).join('・')} さん`
+    ? `${selectedMembers[0].name}さん`
+    : `${selectedMembers.map((m) => m.name).join('・')}さん`
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -267,15 +279,15 @@ export default function SendPage() {
           className="fixed inset-0 z-30 flex items-center justify-center"
           style={{ background: 'rgba(255, 255, 255, 0.78)', backdropFilter: 'blur(10px)' }}
         >
-          <div className="glass-card popup-animate text-center px-10 py-12" style={{ maxWidth: 400 }}>
-            <div style={{ fontSize: 64 }}>🎉</div>
-            <h2 className="gradient-text font-black mt-4" style={{ fontSize: 28 }}>
-              ほめを届けました！
+          <div className="glass-card popup-animate text-center px-10 py-12" style={{ maxWidth: 420 }}>
+            <div style={{ fontSize: 64 }}>{popupPattern.emoji}</div>
+            <h2 className="gradient-text font-black mt-4" style={{ fontSize: 24, lineHeight: 1.4 }}>
+              {selectedNamesText}にほめを届けました。
             </h2>
-            <p style={{ color: '#475569', marginTop: 12, fontSize: 14, lineHeight: 1.8 }}>
-              {selectedNamesText}へ送りました
+            <p style={{ color: '#1E293B', marginTop: 16, fontSize: 15, lineHeight: 1.8, fontWeight: 500 }}>
+              {popupPattern.message}
             </p>
-            <p style={{ color: '#94A3B8', marginTop: 8, fontSize: 13 }}>
+            <p style={{ color: '#94A3B8', marginTop: 16, fontSize: 12 }}>
               3秒後に一覧ページへ移動します…
             </p>
           </div>
