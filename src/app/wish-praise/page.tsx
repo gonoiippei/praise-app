@@ -115,13 +115,14 @@ export default function WishPraisePage() {
           <h1 className="font-black mb-1" style={{ fontSize: 26, color: '#F5F3FF' }}>
             ほめてほしい 🙏
           </h1>
-          <p className="mb-6" style={{ color: '#B8B0D0', fontSize: 14 }}>
-            最近頑張ってるあなたへ。Slackで「ほめてほしい」とお知らせします。
+          <p className="mb-6" style={{ color: '#B8B0D0', fontSize: 14, lineHeight: 1.7 }}>
+            がんばっているあの人にスポットライトを。<br />
+            自分でも、応援したい誰かでもOKです。
           </p>
 
           <div className="flex items-center gap-2 mb-2">
             <span style={{ color: '#FFD43B', fontSize: 14, fontWeight: 700 }}>
-              👤 自分の名前を選んでください
+              👤 ほめてほしい人を選んでください
             </span>
           </div>
 
