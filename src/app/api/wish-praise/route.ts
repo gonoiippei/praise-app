@@ -31,46 +31,49 @@ export async function POST(request: NextRequest) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `🙏 ${mention}さんがほめてほしいらしいよ！`,
-          blocks: [
+          text: `📣 ほめてほしい！リクエスト: ${mention}さん`,
+          attachments: [
             {
-              type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: `🙏 *${mention}さんがほめてほしいらしいよ！*`,
-              },
-            },
-            {
-              type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: `✨ いつも頑張ってる${member.name}さんに、ぜひ一言ほめを届けよう！`,
-              },
-            },
-            {
-              type: 'context',
-              elements: [
+              color: '#FFD43B',
+              blocks: [
                 {
-                  type: 'mrkdwn',
-                  text: '📝 _ほめは匿名で届きます。気軽にどうぞ_',
-                },
-              ],
-            },
-            {
-              type: 'divider',
-            },
-            {
-              type: 'actions',
-              elements: [
-                {
-                  type: 'button',
+                  type: 'header',
                   text: {
                     type: 'plain_text',
-                    text: '✍️ ほめる！',
+                    text: '📣 ほめてほしい！リクエスト',
                     emoji: true,
                   },
-                  url: `${appUrl}/send`,
-                  style: 'primary',
+                },
+                {
+                  type: 'section',
+                  text: {
+                    type: 'mrkdwn',
+                    text: `${mention}さんに、ぜひほめを届けてあげてください 🙏`,
+                  },
+                },
+                {
+                  type: 'context',
+                  elements: [
+                    {
+                      type: 'mrkdwn',
+                      text: '💡 _自分から、または応援したい誰かへのリクエストです_',
+                    },
+                  ],
+                },
+                {
+                  type: 'actions',
+                  elements: [
+                    {
+                      type: 'button',
+                      text: {
+                        type: 'plain_text',
+                        text: '✍️ いますぐほめる',
+                        emoji: true,
+                      },
+                      url: `${appUrl}/send`,
+                      style: 'primary',
+                    },
+                  ],
                 },
               ],
             },
