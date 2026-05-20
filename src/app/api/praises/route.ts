@@ -73,54 +73,56 @@ export async function POST(request: NextRequest) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           text: `🎉 ${memberTextsStr}さんがほめられました！`,
-          blocks: [
+          attachments: [
             {
-              type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: `🎉 *${memberTextsStr}さんがほめられました！*`,
-              },
-            },
-            {
-              type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: `💬 *ほめメッセージ：*\n> ${message.trim()}`,
-              },
-            },
-            {
-              type: 'context',
-              elements: [
+              color: '#FF6B9D',
+              blocks: [
                 {
-                  type: 'mrkdwn',
-                  text: '📝 _匿名の誰かより、こっそりと。_',
-                },
-              ],
-            },
-            {
-              type: 'divider',
-            },
-            {
-              type: 'actions',
-              elements: [
-                {
-                  type: 'button',
+                  type: 'section',
                   text: {
-                    type: 'plain_text',
-                    text: '🌟 ほめ一覧を見る',
-                    emoji: true,
+                    type: 'mrkdwn',
+                    text: `🎉 *${memberTextsStr}さんがほめられました！*`,
                   },
-                  url: `${appUrl}/praises`,
-                  style: 'primary',
                 },
                 {
-                  type: 'button',
+                  type: 'section',
                   text: {
-                    type: 'plain_text',
-                    text: '✍️ 誰かをほめる',
-                    emoji: true,
+                    type: 'mrkdwn',
+                    text: `💬 *ほめメッセージ：*\n> ${message.trim()}`,
                   },
-                  url: appUrl,
+                },
+                {
+                  type: 'context',
+                  elements: [
+                    {
+                      type: 'mrkdwn',
+                      text: '📝 _匿名の誰かより、こっそりと。_',
+                    },
+                  ],
+                },
+                {
+                  type: 'actions',
+                  elements: [
+                    {
+                      type: 'button',
+                      text: {
+                        type: 'plain_text',
+                        text: '🌟 ほめ一覧を見る',
+                        emoji: true,
+                      },
+                      url: `${appUrl}/praises`,
+                      style: 'primary',
+                    },
+                    {
+                      type: 'button',
+                      text: {
+                        type: 'plain_text',
+                        text: '✍️ 誰かをほめる',
+                        emoji: true,
+                      },
+                      url: appUrl,
+                    },
+                  ],
                 },
               ],
             },
