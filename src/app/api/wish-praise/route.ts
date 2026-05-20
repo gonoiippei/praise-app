@@ -67,10 +67,10 @@ export async function POST(request: NextRequest) {
                       type: 'button',
                       text: {
                         type: 'plain_text',
-                        text: '✍️ いますぐほめる',
+                        text: `✍️ ${member.name}さんをほめる`,
                         emoji: true,
                       },
-                      url: `${appUrl}/send`,
+                      url: `${appUrl}/send?for=${member.id}`,
                       style: 'primary',
                     },
                   ],

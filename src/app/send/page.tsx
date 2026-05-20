@@ -166,6 +166,20 @@ export default function SendPage() {
       .catch(() => {})
   }, [])
 
+  // URLの ?for=<member_id> でメンバーを事前選択
+  useEffect(() => {
+    if (members.length === 0) return
+    const params = new URLSearchParams(window.location.search)
+    const forId = params.get('for')
+    if (!forId) return
+    const target = members.find((m) => m.id === forId)
+    if (target) {
+      setSelectedMembers((prev) =>
+        prev.some((m) => m.id === target.id) ? prev : [target]
+      )
+    }
+  }, [members])
+
   const filteredMembers = searchQuery
     ? members.filter((m) => m.name.includes(searchQuery))
     : []
