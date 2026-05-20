@@ -31,10 +31,10 @@ export async function POST(request: NextRequest) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `📣 ほめてほしい！リクエスト: ${mention}さん`,
           attachments: [
             {
               color: '#FFD43B',
+              fallback: `📣 ほめてほしい！リクエスト: ${member.name}さん`,
               blocks: [
                 {
                   type: 'header',
