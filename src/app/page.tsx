@@ -176,6 +176,24 @@ export default function HomePage() {
               🔥 ほめる！
             </button>
           </Link>
+          <Link href="/wish-praise" className="block">
+            <button
+              className="w-full py-4"
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                borderRadius: 50,
+                background: 'linear-gradient(135deg, #FFD43B, #FF9F43)',
+                color: '#1A1030',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                boxShadow: '0 4px 20px rgba(255, 212, 59, 0.3)',
+              }}
+            >
+              🙏 ほめてほしい！
+            </button>
+          </Link>
           <Link href="/praises" className="block">
             <button className="btn-secondary w-full py-3" style={{ fontSize: 15, borderRadius: 50 }}>
               🖼 これまでのほめを見る
