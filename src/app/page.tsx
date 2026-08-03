@@ -5,7 +5,6 @@ import Link from 'next/link'
 import GlowOrbs from '@/components/GlowOrbs'
 import FloatingEmojis from '@/components/FloatingEmojis'
 import BgmController from '@/components/BgmController'
-import { signOutAction } from './actions'
 
 interface Petal {
   id: number
@@ -200,32 +199,13 @@ export default function HomePage() {
         </div>
 
         {/* メンバー管理（下部） */}
-        <div className="mt-8 flex items-center gap-4">
-          <Link
-            href="/members"
-            className="hover:text-slate-800 transition-colors"
-            style={{ color: '#94A3B8', fontSize: 13 }}
-          >
-            ⚙ メンバー管理
-          </Link>
-          <span style={{ color: '#CBD5E1', fontSize: 13 }}>·</span>
-          <form action={signOutAction}>
-            <button
-              type="submit"
-              className="hover:text-slate-800 transition-colors"
-              style={{
-                color: '#94A3B8',
-                fontSize: 13,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-              }}
-            >
-              ログアウト
-            </button>
-          </form>
-        </div>
+        <Link
+          href="/members"
+          className="mt-8 hover:text-slate-800 transition-colors"
+          style={{ color: '#94A3B8', fontSize: 13 }}
+        >
+          ⚙ メンバー管理
+        </Link>
       </main>
     </div>
   )
