@@ -173,7 +173,7 @@ export default function SendPage() {
   useEffect(() => {
     fetch('/api/members')
       .then((r) => r.json())
-      .then(setMembers)
+      .then((data) => setMembers(Array.isArray(data) ? data : []))
       .catch(() => {})
   }, [])
 

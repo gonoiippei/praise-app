@@ -18,7 +18,7 @@ export default function MembersPage() {
   const fetchMembers = (q = '') => {
     fetch(`/api/members?q=${encodeURIComponent(q)}`)
       .then((r) => r.json())
-      .then(setMembers)
+      .then((data) => setMembers(Array.isArray(data) ? data : []))
       .catch(() => {})
   }
 
