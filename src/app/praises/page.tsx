@@ -210,9 +210,13 @@ export default function PraisesPage() {
   useEffect(() => {
     fetch('/api/praises?limit=500')
       .then((r) => r.json())
-      .then((data: Praise[]) => {
+      .then((data: Praise[] | { error: string }) => {
+        if (!Array.isArray(data)) {
+          setAllPraises([])
+          setMembers([])
+          return
+        }
         setAllPraises(data)
-        // メンバー一覧の集計
         const seen = new Map<string, Member>()
         data.forEach((p) => {
           if (p.members && !seen.has(p.member_id)) {
