@@ -87,7 +87,7 @@ export default function MembersPage() {
 
       <div className="relative z-10 min-h-screen flex flex-col">
         <header className="flex items-center px-6 py-4">
-          <Link href="/" style={{ color: '#475569', fontSize: 14 }} className="hover:text-slate-800 transition-colors">
+          <Link href="/" style={{ color: 'var(--text-muted)', fontSize: 14 }} className="hover:text-slate-800 transition-colors">
             ← ホームへ
           </Link>
         </header>
@@ -99,7 +99,7 @@ export default function MembersPage() {
 
           {/* メンバー追加 */}
           <div className="glass-card p-4 mb-6">
-            <h2 style={{ color: '#475569', fontSize: 13, marginBottom: 12 }}>新しいメンバーを追加</h2>
+            <h2 style={{ color: 'var(--text-muted)', fontSize: 13, marginBottom: 12 }}>新しいメンバーを追加</h2>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -111,7 +111,7 @@ export default function MembersPage() {
                 style={{
                   background: 'rgba(255,255,255,0.08)',
                   border: '1px solid rgba(255,255,255,0.15)',
-                  color: '#1E293B',
+                  color: 'var(--text-main)',
                   fontSize: 14,
                   outline: 'none',
                 }}
@@ -130,7 +130,7 @@ export default function MembersPage() {
               </button>
             </div>
             {error && (
-              <p style={{ color: '#EC4899', fontSize: 13, marginTop: 8 }}>{error}</p>
+              <p style={{ color: 'var(--accent-main)', fontSize: 13, marginTop: 8 }}>{error}</p>
             )}
           </div>
 
@@ -144,8 +144,8 @@ export default function MembersPage() {
               className="w-full px-4 py-3 rounded-2xl"
               style={{
                 background: 'white',
-                border: '1px solid #E2E8F0',
-                color: '#1E293B',
+                border: '1px solid var(--border-light)',
+                color: 'var(--text-main)',
                 fontSize: 15,
                 outline: 'none',
               }}
@@ -153,14 +153,14 @@ export default function MembersPage() {
           </div>
 
           {/* メンバー数 */}
-          <p style={{ color: '#94A3B8', fontSize: 13, marginBottom: 12 }}>
+          <p style={{ color: 'var(--text-faint)', fontSize: 13, marginBottom: 12 }}>
             {members.length} 名
           </p>
 
           {/* メンバーリスト */}
           <div className="glass-card overflow-hidden">
             {members.length === 0 ? (
-              <p className="text-center py-8" style={{ color: '#94A3B8' }}>
+              <p className="text-center py-8" style={{ color: 'var(--text-faint)' }}>
                 メンバーが見つかりません
               </p>
             ) : (
@@ -169,17 +169,17 @@ export default function MembersPage() {
                   key={member.id}
                   className="px-4 py-3"
                   style={{
-                    borderBottom: i < members.length - 1 ? '1px solid #F1F5F9' : 'none',
+                    borderBottom: i < members.length - 1 ? '1px solid rgba(27, 43, 75, 0.08)' : 'none',
                   }}
                 >
                   <div className="flex items-center gap-3">
                     <Avatar name={member.name} size={36} />
-                    <span style={{ flex: 1, color: '#1E293B', fontSize: 14 }}>
+                    <span style={{ flex: 1, color: 'var(--text-main)', fontSize: 14 }}>
                       {member.name}
                     </span>
                     <button
                       onClick={() => handleSlackIdEdit(member)}
-                      style={{ color: '#475569', fontSize: 12, padding: '2px 8px', border: '1px solid #E2E8F0', borderRadius: 6, background: 'white' }}
+                      style={{ color: 'var(--text-muted)', fontSize: 12, padding: '2px 8px', border: '1px solid var(--border-light)', borderRadius: 6, background: 'white' }}
                       className="hover:border-sky-500 transition-colors"
                       title="Slack IDを設定"
                     >
@@ -187,7 +187,7 @@ export default function MembersPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(member.id, member.name)}
-                      style={{ color: '#94A3B8', fontSize: 18, padding: '4px 8px' }}
+                      style={{ color: 'var(--text-faint)', fontSize: 18, padding: '4px 8px' }}
                       className="hover:text-red-400 transition-colors"
                       title="削除"
                     >
@@ -206,21 +206,21 @@ export default function MembersPage() {
                         className="flex-1 px-3 py-1 rounded-lg"
                         style={{
                           background: 'white',
-                          border: '1px solid #0EA5E9',
-                          color: '#1E293B',
+                          border: '1px solid var(--accent-sub)',
+                          color: 'var(--text-main)',
                           fontSize: 13,
                           outline: 'none',
                         }}
                       />
                       <button
                         onClick={() => handleSlackIdSave(member.id)}
-                        style={{ color: '#A78BFA', fontSize: 13, padding: '2px 8px' }}
+                        style={{ color: 'var(--accent-sub)', fontSize: 13, padding: '2px 8px' }}
                       >
                         保存
                       </button>
                       <button
                         onClick={() => setEditingSlackId(null)}
-                        style={{ color: '#94A3B8', fontSize: 13, padding: '2px 8px' }}
+                        style={{ color: 'var(--text-faint)', fontSize: 13, padding: '2px 8px' }}
                       >
                         キャンセル
                       </button>

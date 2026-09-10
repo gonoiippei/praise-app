@@ -28,14 +28,14 @@ function MemberPill({
         fontSize: 13,
         fontWeight: isSelected ? 700 : 400,
         background: isSelected
-          ? 'linear-gradient(135deg, #EC4899, #8B5CF6)'
+          ? 'linear-gradient(135deg, var(--accent-main), var(--accent-main-2))'
           : 'white',
-        color: isSelected ? 'white' : isMaxReached ? '#CBD5E1' : '#1E293B',
-        border: isSelected ? '1px solid transparent' : '1px solid #E2E8F0',
+        color: isSelected ? 'white' : isMaxReached ? 'var(--text-disabled)' : 'var(--text-main)',
+        border: isSelected ? '1px solid transparent' : '1px solid var(--border-light)',
         transition: 'all 0.15s',
         cursor: isMaxReached ? 'not-allowed' : 'pointer',
         opacity: isMaxReached ? 0.5 : 1,
-        boxShadow: isSelected ? '0 4px 12px rgba(236, 72, 153, 0.3)' : '0 1px 3px rgba(0,0,0,0.04)',
+        boxShadow: isSelected ? '0 4px 12px rgba(193, 59, 27, 0.28)' : '0 1px 3px rgba(0,0,0,0.04)',
       }}
     >
       {member.name}
@@ -110,7 +110,7 @@ function playChurchBell(audioCtx: AudioContext) {
   })
 }
 
-const PETAL_COLORS = ['#FF6B9D', '#FF9F43', '#C084FC', '#FFD43B', '#FF8FAB']
+const PETAL_COLORS = ['#E4572E', '#E2A03D', '#2C5F9E', '#6BA368', '#D96A88']
 const MAX_MEMBERS = 10
 
 const TEAM_GROUPS = [
@@ -277,17 +277,17 @@ export default function SendPage() {
       {showPopup && (
         <div
           className="fixed inset-0 z-30 flex items-center justify-center"
-          style={{ background: 'rgba(255, 255, 255, 0.78)', backdropFilter: 'blur(10px)' }}
+          style={{ background: 'rgba(252, 250, 244, 0.82)', backdropFilter: 'blur(10px)' }}
         >
           <div className="glass-card popup-animate text-center px-10 py-12" style={{ maxWidth: 420 }}>
             <div style={{ fontSize: 64 }}>{popupPattern.emoji}</div>
             <h2 className="gradient-text font-black mt-4" style={{ fontSize: 24, lineHeight: 1.4 }}>
               {selectedNamesText}にほめを届けました。
             </h2>
-            <p style={{ color: '#1E293B', marginTop: 16, fontSize: 15, lineHeight: 1.8, fontWeight: 500 }}>
+            <p style={{ color: 'var(--text-main)', marginTop: 16, fontSize: 15, lineHeight: 1.8, fontWeight: 500 }}>
               {popupPattern.message}
             </p>
-            <p style={{ color: '#94A3B8', marginTop: 16, fontSize: 12 }}>
+            <p style={{ color: 'var(--text-faint)', marginTop: 16, fontSize: 12 }}>
               3秒後に一覧ページへ移動します…
             </p>
           </div>
@@ -299,7 +299,7 @@ export default function SendPage() {
         <header className="flex items-center justify-between px-6 py-4">
           <Link
             href="/"
-            style={{ color: '#475569', fontSize: 14 }}
+            style={{ color: 'var(--text-muted)', fontSize: 14 }}
             className="hover:text-slate-800 transition-colors"
           >
             ← ホームに戻る
@@ -310,25 +310,25 @@ export default function SendPage() {
         <main className="flex-1 px-4 pb-8 w-full" style={{ maxWidth: 560, margin: '0 auto' }}>
 
           {/* タイトル */}
-          <h1 className="font-black mb-1" style={{ fontSize: 26, color: '#1E293B' }}>
+          <h1 className="font-black mb-1" style={{ fontSize: 26, color: 'var(--text-main)' }}>
             ほめを届ける 🎁
           </h1>
-          <p className="mb-6" style={{ color: '#475569', fontSize: 14 }}>
+          <p className="mb-6" style={{ color: 'var(--text-muted)', fontSize: 14 }}>
             あなたの名前は相手に伝わりません。気軽にどうぞ！
           </p>
 
           {/* 誰をほめる？ */}
           <div className="flex items-center gap-2 mb-2">
-            <span style={{ color: '#EC4899', fontSize: 14, fontWeight: 700 }}>
+            <span style={{ color: 'var(--accent-main)', fontSize: 14, fontWeight: 700 }}>
               🎯 誰をほめる？
             </span>
-            <span style={{ color: '#94A3B8', fontSize: 12 }}>
+            <span style={{ color: 'var(--text-faint)', fontSize: 12 }}>
               （最大{MAX_MEMBERS}人まで選べます）
             </span>
             {selectedMembers.length > 0 && (
               <span style={{
                 marginLeft: 'auto',
-                color: '#8B5CF6',
+                color: 'var(--accent-main-2)',
                 fontSize: 12,
                 fontWeight: 700,
               }}>
@@ -347,8 +347,8 @@ export default function SendPage() {
               className="w-full px-4 py-3 rounded-2xl"
               style={{
                 background: 'white',
-                border: '1px solid #E2E8F0',
-                color: '#1E293B',
+                border: '1px solid var(--border-light)',
+                color: 'var(--text-main)',
                 fontSize: 14,
                 outline: 'none',
               }}
@@ -358,11 +358,11 @@ export default function SendPage() {
           {/* メンバー選択エリア */}
           <div className="mb-6 overflow-y-auto" style={{ maxHeight: 300 }}>
             {members.length === 0 ? (
-              <p style={{ color: '#94A3B8', fontSize: 14 }}>読み込み中...</p>
+              <p style={{ color: 'var(--text-faint)', fontSize: 14 }}>読み込み中...</p>
             ) : searchQuery ? (
               /* 検索中：フラットに表示 */
               filteredMembers.length === 0 ? (
-                <p style={{ color: '#94A3B8', fontSize: 14 }}>見つかりません</p>
+                <p style={{ color: 'var(--text-faint)', fontSize: 14 }}>見つかりません</p>
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {filteredMembers.map((member) => (
@@ -386,7 +386,7 @@ export default function SendPage() {
                   if (groupMembers.length === 0) return null
                   return (
                     <div key={group.label}>
-                      <div style={{ color: '#94A3B8', fontSize: 11, fontWeight: 700, marginBottom: 8, letterSpacing: '0.08em' }}>
+                      <div style={{ color: 'var(--text-faint)', fontSize: 11, fontWeight: 700, marginBottom: 8, letterSpacing: '0.08em' }}>
                         {group.label}
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -408,7 +408,7 @@ export default function SendPage() {
           </div>
 
           {/* メッセージ */}
-          <div className="mb-2" style={{ color: '#475569', fontSize: 14, fontWeight: 700 }}>
+          <div className="mb-2" style={{ color: 'var(--text-muted)', fontSize: 14, fontWeight: 700 }}>
             💬 メッセージ
           </div>
           <div className="mb-6">
@@ -425,14 +425,14 @@ export default function SendPage() {
               className="w-full px-4 py-3 rounded-2xl resize-none"
               style={{
                 background: 'white',
-                border: '1px solid #E2E8F0',
-                color: '#1E293B',
+                border: '1px solid var(--border-light)',
+                color: 'var(--text-main)',
                 fontSize: 14,
                 outline: 'none',
                 opacity: selectedMembers.length > 0 ? 1 : 0.6,
               }}
             />
-            <div className="text-right mt-1" style={{ color: '#94A3B8', fontSize: 12 }}>
+            <div className="text-right mt-1" style={{ color: 'var(--text-faint)', fontSize: 12 }}>
               {message.length} 文字
             </div>
           </div>
@@ -447,13 +447,13 @@ export default function SendPage() {
               fontWeight: 900,
               borderRadius: 18,
               background: canSubmit
-                ? 'linear-gradient(135deg, #EC4899, #8B5CF6)'
-                : '#E2E8F0',
-              color: canSubmit ? 'white' : '#94A3B8',
+                ? 'linear-gradient(135deg, var(--accent-main), var(--accent-main-2))'
+                : 'var(--border-light)',
+              color: canSubmit ? 'white' : 'var(--text-faint)',
               border: 'none',
               cursor: canSubmit ? 'pointer' : 'not-allowed',
               transition: 'all 0.2s',
-              boxShadow: canSubmit ? '0 10px 30px rgba(236, 72, 153, 0.35)' : 'none',
+              boxShadow: canSubmit ? '0 10px 30px rgba(193, 59, 27, 0.32)' : 'none',
             }}
           >
             {loading ? '送信中…' : `🍊 匿名でほめる！${selectedMembers.length > 1 ? `（${selectedMembers.length}人）` : ''}`}
