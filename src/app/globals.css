@@ -1,17 +1,31 @@
 @import "tailwindcss";
 
+/* =============================================
+   配色テーマ「藍と朱」
+   ここの変数を差し替えるだけで全体の模様替えができます
+   ============================================= */
 :root {
-  --bg-base: #FFFFFF;
-  --text-main: #1E293B;
-  --text-muted: #475569;
-  --text-faint: #94A3B8;
-  --accent-pink: #EC4899;
-  --accent-sky: #0EA5E9;
-  --accent-purple: #8B5CF6;
-  --accent-cyan: #06B6D4;
-  --accent-yellow: #F59E0B;
-  --accent-mint: #34D399;
-  --border-light: #E2E8F0;
+  --bg-base: #FCFAF4;
+  --bg-grad: linear-gradient(160deg, #FCFAF4 0%, #F4EEE1 55%, #EBE2CF 100%);
+  --surface: #FFFFFF;
+
+  --text-main: #1B2B4B;
+  --text-muted: #56617A;
+  --text-faint: #9AA2B4;
+  --text-disabled: #B9BFCB;
+
+  --accent-main: #E4572E;    /* 朱 */
+  --accent-main-2: #C13B1B;  /* 深朱 */
+  --accent-sub: #1B3B6F;     /* 藍 */
+  --accent-sub-2: #2C5F9E;   /* 浅めの藍 */
+  --accent-gold: #E2A03D;    /* 山吹 */
+  --accent-hi: #A9700F;      /* 山吹（文字用に濃く） */
+  --accent-green: #4E8B57;   /* 若竹 */
+
+  --border-light: #E2D9C6;
+  --tint-main: 193, 59, 27;  /* 朱のRGB（影用） */
+  --tint-sub: 27, 59, 111;   /* 藍のRGB（影用） */
+  --overlay: rgba(252, 250, 244, 0.82);
 }
 
 @theme inline {
@@ -23,7 +37,7 @@
 }
 
 body {
-  background: linear-gradient(160deg, #FFFFFF 0%, #E0F2FE 50%, #DBEAFE 100%);
+  background: var(--bg-grad);
   background-attachment: fixed;
   color: var(--text-main);
   font-family: var(--font-zen-maru), 'Zen Maru Gothic', 'Noto Sans JP', sans-serif;
@@ -35,10 +49,10 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(14, 165, 233, 0.05);
+  background: rgba(var(--tint-sub), 0.05);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(14, 165, 233, 0.35);
+  background: rgba(var(--tint-sub), 0.35);
   border-radius: 3px;
 }
 
@@ -53,16 +67,16 @@ body {
 
 /* カード */
 .glass-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.80);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(var(--tint-sub), 0.12);
   border-radius: 18px;
-  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.06);
+  box-shadow: 0 4px 14px rgba(var(--tint-sub), 0.06);
 }
 
 /* グラデーションテキスト */
 .gradient-text {
-  background: linear-gradient(135deg, #0EA5E9, #EC4899, #8B5CF6);
+  background: linear-gradient(135deg, var(--accent-sub), var(--accent-main-2), var(--accent-gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -70,18 +84,18 @@ body {
 
 /* メインボタン（ほめる！） */
 .btn-main {
-  background: linear-gradient(135deg, #EC4899, #8B5CF6);
+  background: linear-gradient(135deg, var(--accent-main), var(--accent-main-2));
   color: white;
   font-weight: 900;
   border-radius: 18px;
   transition: all 0.2s;
-  box-shadow: 0 10px 30px rgba(236, 72, 153, 0.35), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(var(--tint-main), 0.32), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
   border: none;
   cursor: pointer;
 }
 .btn-main:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(236, 72, 153, 0.45), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 40px rgba(var(--tint-main), 0.42), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
 }
 .btn-main:active {
   transform: translateY(1px);
@@ -89,33 +103,33 @@ body {
 
 /* セカンダリボタン */
 .btn-secondary {
-  background: white;
-  color: #475569;
-  border: 2px solid #E2E8F0;
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 2px solid var(--border-light);
   border-radius: 18px;
   font-weight: 700;
   transition: all 0.2s;
   cursor: pointer;
 }
 .btn-secondary:hover {
-  border-color: #0EA5E9;
-  background: rgba(14, 165, 233, 0.05);
+  border-color: var(--accent-sub);
+  background: rgba(var(--tint-sub), 0.05);
 }
 
 /* ほめてほしいボタン用（スカイブルー） */
 .btn-wish {
-  background: linear-gradient(135deg, #0EA5E9, #06B6D4);
+  background: linear-gradient(135deg, var(--accent-sub), var(--accent-sub-2));
   color: white;
   font-weight: 900;
   border-radius: 18px;
   transition: all 0.2s;
-  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.35), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(var(--tint-sub), 0.32), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
   border: none;
   cursor: pointer;
 }
 .btn-wish:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(14, 165, 233, 0.45), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 40px rgba(var(--tint-sub), 0.42), inset 0 -3px 0 rgba(0, 0, 0, 0.08);
 }
 .btn-wish:active {
   transform: translateY(1px);
@@ -131,11 +145,11 @@ body {
   transition: all 0.3s;
 }
 .toggle-switch.on {
-  background: linear-gradient(135deg, #EC4899, #8B5CF6);
-  box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+  background: linear-gradient(135deg, var(--accent-main), var(--accent-main-2));
+  box-shadow: 0 0 12px rgba(var(--tint-main), 0.4);
 }
 .toggle-switch.off {
-  background: #E2E8F0;
+  background: var(--border-light);
 }
 .toggle-knob {
   width: 26px;

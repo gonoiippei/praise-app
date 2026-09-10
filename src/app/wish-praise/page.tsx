@@ -87,17 +87,17 @@ export default function WishPraisePage() {
       {showPopup && selectedMember && (
         <div
           className="fixed inset-0 z-30 flex items-center justify-center"
-          style={{ background: 'rgba(255, 255, 255, 0.78)', backdropFilter: 'blur(10px)' }}
+          style={{ background: 'rgba(252, 250, 244, 0.82)', backdropFilter: 'blur(10px)' }}
         >
           <div className="glass-card popup-animate text-center px-10 py-12" style={{ maxWidth: 400 }}>
             <div style={{ fontSize: 64 }}>🙏</div>
             <h2 className="gradient-text font-black mt-4" style={{ fontSize: 26 }}>
               送信しました！
             </h2>
-            <p style={{ color: '#475569', marginTop: 12, fontSize: 14, lineHeight: 1.8 }}>
+            <p style={{ color: 'var(--text-muted)', marginTop: 12, fontSize: 14, lineHeight: 1.8 }}>
               Slackに「{selectedMember.name}さんが<br />ほめてほしいらしいよ！」と<br />投稿されました
             </p>
-            <p style={{ color: '#94A3B8', marginTop: 8, fontSize: 13 }}>
+            <p style={{ color: 'var(--text-faint)', marginTop: 8, fontSize: 13 }}>
               3秒後にホームへ戻ります…
             </p>
           </div>
@@ -106,22 +106,22 @@ export default function WishPraisePage() {
 
       <div className="relative z-10 min-h-screen flex flex-col">
         <header className="flex items-center px-6 py-4">
-          <Link href="/" style={{ color: '#475569', fontSize: 14 }} className="hover:text-slate-800 transition-colors">
+          <Link href="/" style={{ color: 'var(--text-muted)', fontSize: 14 }} className="hover:text-slate-800 transition-colors">
             ← ホームに戻る
           </Link>
         </header>
 
         <main className="flex-1 px-4 pb-8 w-full" style={{ maxWidth: 560, margin: '0 auto' }}>
-          <h1 className="font-black mb-1" style={{ fontSize: 26, color: '#1E293B' }}>
+          <h1 className="font-black mb-1" style={{ fontSize: 26, color: 'var(--text-main)' }}>
             ほめてほしい 🙏
           </h1>
-          <p className="mb-6" style={{ color: '#475569', fontSize: 14, lineHeight: 1.7 }}>
+          <p className="mb-6" style={{ color: 'var(--text-muted)', fontSize: 14, lineHeight: 1.7 }}>
             がんばっているあの人にスポットライトを。<br />
             自分でも、応援したい誰かでもOKです。
           </p>
 
           <div className="flex items-center gap-2 mb-2">
-            <span style={{ color: '#0EA5E9', fontSize: 14, fontWeight: 700 }}>
+            <span style={{ color: 'var(--accent-sub)', fontSize: 14, fontWeight: 700 }}>
               👤 ほめてほしい人を選んでください
             </span>
           </div>
@@ -135,8 +135,8 @@ export default function WishPraisePage() {
               className="w-full px-4 py-3 rounded-2xl"
               style={{
                 background: 'white',
-                border: '1px solid #E2E8F0',
-                color: '#1E293B',
+                border: '1px solid var(--border-light)',
+                color: 'var(--text-main)',
                 fontSize: 14,
                 outline: 'none',
               }}
@@ -145,10 +145,10 @@ export default function WishPraisePage() {
 
           <div className="mb-6 overflow-y-auto" style={{ maxHeight: 300 }}>
             {members.length === 0 ? (
-              <p style={{ color: '#94A3B8', fontSize: 14 }}>読み込み中...</p>
+              <p style={{ color: 'var(--text-faint)', fontSize: 14 }}>読み込み中...</p>
             ) : searchQuery ? (
               filteredMembers.length === 0 ? (
-                <p style={{ color: '#94A3B8', fontSize: 14 }}>見つかりません</p>
+                <p style={{ color: 'var(--text-faint)', fontSize: 14 }}>見つかりません</p>
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {filteredMembers.map((member) => (
@@ -170,7 +170,7 @@ export default function WishPraisePage() {
                   if (groupMembers.length === 0) return null
                   return (
                     <div key={group.label}>
-                      <div style={{ color: '#94A3B8', fontSize: 11, fontWeight: 700, marginBottom: 8, letterSpacing: '0.08em' }}>
+                      <div style={{ color: 'var(--text-faint)', fontSize: 11, fontWeight: 700, marginBottom: 8, letterSpacing: '0.08em' }}>
                         {group.label}
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -199,13 +199,13 @@ export default function WishPraisePage() {
               fontWeight: 900,
               borderRadius: 18,
               background: canSubmit
-                ? 'linear-gradient(135deg, #0EA5E9, #06B6D4)'
-                : '#E2E8F0',
-              color: canSubmit ? 'white' : '#94A3B8',
+                ? 'linear-gradient(135deg, var(--accent-sub), var(--accent-sub-2))'
+                : 'var(--border-light)',
+              color: canSubmit ? 'white' : 'var(--text-faint)',
               border: 'none',
               cursor: canSubmit ? 'pointer' : 'not-allowed',
               transition: 'all 0.2s',
-              boxShadow: canSubmit ? '0 10px 30px rgba(14, 165, 233, 0.35)' : 'none',
+              boxShadow: canSubmit ? '0 10px 30px rgba(27, 59, 111, 0.32)' : 'none',
             }}
           >
             {loading ? '送信中…' : '🙏 ほめてもらう！'}
@@ -234,13 +234,13 @@ function MemberPill({
         fontSize: 13,
         fontWeight: isSelected ? 700 : 400,
         background: isSelected
-          ? 'linear-gradient(135deg, #0EA5E9, #06B6D4)'
+          ? 'linear-gradient(135deg, var(--accent-sub), var(--accent-sub-2))'
           : 'white',
-        color: isSelected ? 'white' : '#1E293B',
-        border: isSelected ? '1px solid transparent' : '1px solid #E2E8F0',
+        color: isSelected ? 'white' : 'var(--text-main)',
+        border: isSelected ? '1px solid transparent' : '1px solid var(--border-light)',
         transition: 'all 0.15s',
         cursor: 'pointer',
-        boxShadow: isSelected ? '0 4px 12px rgba(14, 165, 233, 0.3)' : '0 1px 3px rgba(0,0,0,0.04)',
+        boxShadow: isSelected ? '0 4px 12px rgba(27, 59, 111, 0.28)' : '0 1px 3px rgba(0,0,0,0.04)',
       }}
     >
       {member.name}

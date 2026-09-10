@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({
           attachments: [
             {
-              color: '#FFD43B',
+              color: '#1B3B6F',
               fallback: `📣 ほめてほしい！リクエスト: ${member.name}さん`,
               blocks: [
                 {

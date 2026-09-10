@@ -15,7 +15,7 @@ interface Petal {
   color: string
 }
 
-const PETAL_COLORS = ['#FFD43B', '#FF6B9D', '#C084FC', '#60C3FF', '#34D399', '#FF9F43']
+const PETAL_COLORS = ['#E4572E', '#E2A03D', '#2C5F9E', '#6BA368', '#D96A88', '#C13B1B']
 const MILESTONES = [100, 150, 200, 300, 500, 1000]
 
 export default function HomePage() {
@@ -61,7 +61,7 @@ export default function HomePage() {
       {milestoneCelebration && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ background: 'rgba(255, 255, 255, 0.78)', backdropFilter: 'blur(10px)' }}
+          style={{ background: 'rgba(252, 250, 244, 0.82)', backdropFilter: 'blur(10px)' }}
           onClick={() => setMilestoneCelebration(null)}
         >
           {/* 花びら */}
@@ -96,15 +96,15 @@ export default function HomePage() {
             >
               累計{milestoneCelebration}件達成！
             </h2>
-            <p style={{ color: '#1E293B', marginTop: 12, fontSize: 16, lineHeight: 1.8 }}>
+            <p style={{ color: 'var(--text-main)', marginTop: 12, fontSize: 16, lineHeight: 1.8 }}>
               みんなのほめが<br />
-              <span style={{ fontWeight: 900, color: '#F59E0B' }}>{milestoneCelebration}件</span>
+              <span style={{ fontWeight: 900, color: 'var(--accent-hi)' }}>{milestoneCelebration}件</span>
               になりました🎉
             </p>
-            <p style={{ color: '#475569', marginTop: 12, fontSize: 13 }}>
+            <p style={{ color: 'var(--text-muted)', marginTop: 12, fontSize: 13 }}>
               ほめがめぐりめぐって、<br />この世界をちょっとだけよくしています ✨
             </p>
-            <p style={{ color: '#94A3B8', marginTop: 16, fontSize: 12 }}>
+            <p style={{ color: 'var(--text-faint)', marginTop: 16, fontSize: 12 }}>
               タップして閉じる
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function HomePage() {
 
         {/* タイトル */}
         <h1 className="font-black mb-4" style={{ lineHeight: 1.2 }}>
-          <div style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', color: '#0F172A' }}>
+          <div style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', color: 'var(--text-main)' }}>
             匿名で、
           </div>
           <div
@@ -144,7 +144,7 @@ export default function HomePage() {
         </p>
 
         {/* サブテキスト */}
-        <p className="mb-8" style={{ color: '#475569', fontSize: 15, lineHeight: 1.8 }}>
+        <p className="mb-8" style={{ color: 'var(--text-muted)', fontSize: 15, lineHeight: 1.8 }}>
           チームの仲間に、匿名で感謝や賞賛を届けよう。<br />
           あなたの一言が、誰かの一日を変えるかも ✨
         </p>
@@ -155,16 +155,16 @@ export default function HomePage() {
             className="glass-card px-6 py-3 text-center"
             style={{ borderRadius: 50 }}
           >
-            <span style={{ color: '#1E293B', fontSize: 15 }}>
-              🏆 累計 <span style={{ fontWeight: 900, color: '#F59E0B' }}>{stats ? `${stats.total}件` : '…'}</span> のほめが届いています
+            <span style={{ color: 'var(--text-main)', fontSize: 15 }}>
+              🏆 累計 <span style={{ fontWeight: 900, color: 'var(--accent-hi)' }}>{stats ? `${stats.total}件` : '…'}</span> のほめが届いています
             </span>
           </div>
           <div
             className="glass-card px-6 py-3 text-center"
             style={{ borderRadius: 50 }}
           >
-            <span style={{ color: '#1E293B', fontSize: 15 }}>
-              ✨ 今日は <span style={{ fontWeight: 900, color: '#EC4899' }}>{stats ? `${stats.today}件` : '…'}</span> のほめが生まれました！
+            <span style={{ color: 'var(--text-main)', fontSize: 15 }}>
+              ✨ 今日は <span style={{ fontWeight: 900, color: 'var(--accent-main)' }}>{stats ? `${stats.today}件` : '…'}</span> のほめが生まれました！
             </span>
           </div>
         </div>
@@ -172,7 +172,7 @@ export default function HomePage() {
         {/* ボタン */}
         <div className="flex flex-col gap-3 w-full" style={{ maxWidth: 340 }}>
           <div>
-            <p className="mb-2 text-center" style={{ color: '#64748B', fontSize: 13 }}>
+            <p className="mb-2 text-center" style={{ color: 'var(--text-muted)', fontSize: 13 }}>
               ありがとうを、こっそり届ける
             </p>
             <Link href="/send" className="block">
@@ -182,7 +182,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div>
-            <p className="mb-2 text-center" style={{ color: '#64748B', fontSize: 13 }}>
+            <p className="mb-2 text-center" style={{ color: 'var(--text-muted)', fontSize: 13 }}>
               がんばりに、スポットライトを
             </p>
             <Link href="/wish-praise" className="block">
@@ -202,7 +202,7 @@ export default function HomePage() {
         <Link
           href="/members"
           className="mt-8 hover:text-slate-800 transition-colors"
-          style={{ color: '#94A3B8', fontSize: 13 }}
+          style={{ color: 'var(--text-faint)', fontSize: 13 }}
         >
           ⚙ メンバー管理
         </Link>

@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({
           attachments: [
             {
-              color: '#FF6B9D',
+              color: '#E4572E',
               fallback: `🎉 ${memberTextsStr}さんがほめられました！`,
               blocks: [
                 {
@@ -211,7 +211,7 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify({
             attachments: [
               {
-                color: '#F59E0B',
+                color: '#E2A03D',
                 fallback: `🏆 累計${totalCount}件達成！`,
                 blocks: [
                   {

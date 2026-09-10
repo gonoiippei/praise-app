@@ -5,14 +5,14 @@ interface AvatarProps {
 
 function getAvatarColor(name: string): string {
   const colors = [
-    ['#FF6B9D', '#C084FC'],
-    ['#60C3FF', '#34D399'],
-    ['#FFD43B', '#FF9F43'],
-    ['#C084FC', '#60C3FF'],
-    ['#34D399', '#60C3FF'],
-    ['#FF9F43', '#FF6B9D'],
-    ['#60C3FF', '#C084FC'],
-    ['#FF6B9D', '#FFD43B'],
+    ['#1B3B6F', '#2C5F9E'], // 藍
+    ['#E4572E', '#C13B1B'], // 朱
+    ['#C9A227', '#A9700F'], // 山吹
+    ['#4E8B57', '#2F6B45'], // 若竹
+    ['#5D4E8C', '#3F3566'], // 江戸紫
+    ['#2C6E76', '#1E5158'], // 鴨の羽色
+    ['#B33A3A', '#8C2A2A'], // 深緋
+    ['#7A6A4F', '#5A4C37'], // 利休茶
   ]
   let hash = 0
   for (let i = 0; i < name.length; i++) {
