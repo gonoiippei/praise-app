@@ -33,6 +33,7 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|gif|webp|ico|mp3|wav|woff|woff2)$).*)',
+    // api/keep-alive はVercel Cronが叩くためBasic認証の対象外にする
+    '/((?!api/keep-alive|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|gif|webp|ico|mp3|wav|woff|woff2)$).*)',
   ],
 }
