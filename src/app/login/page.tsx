@@ -56,8 +56,14 @@ export default function LoginPage() {
             <h1 className="font-black mt-3" style={{ fontSize: 24, color: 'var(--text-main)' }}>
               ほめアプリ
             </h1>
-            <p className="mt-2" style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-              ユーザー名とパスワードを入力してください
+            <p className="mt-2" style={{ fontSize: 13, lineHeight: 1.8, color: 'var(--text-muted)' }}>
+              <span className="inline-block">ユーザー名とパスワードを</span>
+              <span className="inline-block">入力してください。</span>
+              <br />
+              <span className="inline-block">ログイン情報は、</span>
+              <span className="inline-block">Slackの「ほめ通信」</span>
+              <span className="inline-block">チャンネルを</span>
+              <span className="inline-block">ご覧ください。</span>
             </p>
           </div>
 
